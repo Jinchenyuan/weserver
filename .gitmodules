@@ -1,0 +1,6 @@
+[submodule "submodule/protocol"]
+	path = submodule/protocol
+	url = git@gitee.com:McLiYT/lcprotocol.git
+[submodule "submodule/config"]
+	path = submodule/config
+	url = git@gitee.com:McLiYT/lcconfig.git
