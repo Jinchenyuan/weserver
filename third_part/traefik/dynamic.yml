@@ -1,0 +1,35 @@
+http:
+  routers:
+    api-router:
+      rule: "PathPrefix(`/api`)"
+      service: api-service
+      entryPoints:
+        - web
+
+    account-router:
+      rule: "PathPrefix(`/account`)"
+      service: account-service
+      entryPoints:
+        - web
+
+    hello-router:
+      rule: "PathPrefix(`/hello`)"
+      service: hello-service
+      entryPoints:
+        - web
+        
+  services:
+    api-service:
+      loadBalancer:
+        servers:
+          - url: "http://192.168.1.100:8080"
+
+    account-service:
+      loadBalancer:
+        servers:
+          - url: "http://192.168.1.101:8080"
+
+    hello-service:
+      loadBalancer:
+        servers:
+          - url: "http://10.4.11.146:8888"
