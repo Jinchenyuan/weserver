@@ -13,11 +13,19 @@ http:
         - web
 
     hello-router:
-      rule: "PathPrefix(`/hello`)"
+      rule: "Path(`/hello`)"           # 精确匹配 /hello
       service: hello-service
       entryPoints:
         - web
-        
+      middlewares:
+        - hello-rewrite
+
+  middlewares:
+    hello-rewrite:
+      replacePathRegex:
+        regex: "^/hello/?$"
+        replacement: "/hello.html"
+
   services:
     api-service:
       loadBalancer:

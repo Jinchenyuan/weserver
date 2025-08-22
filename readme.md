@@ -1,6 +1,6 @@
 ### 技术栈
 #### framework
-- gateway: caddy (api, https, tsl)
+- gateway: traefik (api, https, tsl)
 - server: gin(用于api通信) + go-micro(实现为服务、服务发现；用于服务通信)
 - admin: go-admin
 #### driver

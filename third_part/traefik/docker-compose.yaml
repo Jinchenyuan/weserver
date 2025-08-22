@@ -14,7 +14,7 @@ services:
       - "--log.level=DEBUG"
       - "--accesslog=true"
     ports:
-      - "80:80"
+      - "8081:80"
       - "8080:8080" # API 默认端口
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
