@@ -3,22 +3,27 @@ package core
 import (
 	"context"
 	"fmt"
+	"net"
 	"server/core/transport"
+	"server/core/transport/http"
+	"server/core/transport/micro"
 	"server/third_part/etcd"
 	"sync"
+	"time"
+
+	"go-micro.dev/v5/registry"
+	etcdReg "go-micro.dev/v5/registry/etcd"
+	clientv3 "go.etcd.io/etcd/client/v3"
 )
 
 type Mesa struct {
-	opts        options
-	retChan     chan int
-	etcdCtl     *etcd.Ctl
-	clusterId   int64
-	clusterList []int64
+	opts    options
+	retChan chan int
+	etcdCtl *etcd.Ctl
 }
 
 func New(opts ...Options) *Mesa {
 	o := options{}
-
 	for _, opt := range opts {
 		opt(&o)
 	}
@@ -29,16 +34,43 @@ func New(opts ...Options) *Mesa {
 		AutoTLS:        false,
 		RevokeCerts:    false,
 	}, etcd.WithEndpoints(o.EtcdConfig.Endpoints), etcd.WithAuth(o.EtcdConfig.Username, o.EtcdConfig.Password))
+	if err != nil {
+		panic(fmt.Sprintf("failed to create etcd controller: %v", err))
+	}
+
+	hs := http.NewHTTPServer(
+		http.WithHost(net.ParseIP("0.0.0.0")),
+		http.WithPort(o.HttpPort),
+	)
+
+	etcdCli, err := clientv3.New(clientv3.Config{
+		Endpoints:   o.EtcdConfig.Endpoints,
+		Username:    o.EtcdConfig.Username,
+		Password:    o.EtcdConfig.Password,
+		DialTimeout: 5 * time.Second,
+	})
+	if err != nil {
+		panic(fmt.Sprintf("failed to create etcd clientv3: %v", err))
+	}
+	// Define a custom type for the context key to avoid collisions
+	type etcdClientKeyType struct{}
+	var etcdClientKey = etcdClientKeyType{}
+
+	reg := etcdReg.NewEtcdRegistry(func(opt *registry.Options) {
+		opt.Addrs = o.EtcdConfig.Endpoints
+		opt.Context = context.WithValue(context.Background(), etcdClientKey, etcdCli)
+	})
+	ms := micro.NewMicroServer(micro.WithRegistry(reg))
+	WithServers(hs, ms)(&o)
 
 	if err != nil {
 		panic(fmt.Sprintf("failed to create etcd client: %v", err))
 	}
 
 	return &Mesa{
-		opts:        o,
-		retChan:     make(chan int),
-		etcdCtl:     etcdCtl,
-		clusterList: make([]int64, 0),
+		opts:    o,
+		retChan: make(chan int),
+		etcdCtl: etcdCtl,
 	}
 }
 

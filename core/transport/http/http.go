@@ -25,8 +25,11 @@ func NewHTTPServer(opts ...Options) *Server {
 	}
 
 	r := gin.Default()
-	r.GET("/", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{"message": "Hello World"})
+	r.GET("/admin", func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{"message": "Hello World, this is Gin admin"})
+	})
+	r.GET("/account", func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{"message": "Hello World, this is Gin account."})
 	})
 
 	srv := &http.Server{

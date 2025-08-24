@@ -16,13 +16,17 @@ type options struct {
 	// see common.Level
 	LogLevel logger.Level
 
-	// AppId are provided for logical separation, but clusters across AppId are isolated with no built-in communication.
-	// Users requiring interaction must handle it externally.
-	AppId string
+	HttpPort int
 
 	EtcdConfig clientv3.Config
 
 	Servers []transport.Server
+}
+
+func WithHttpPort(port int) Options {
+	return func(o *options) {
+		o.HttpPort = port
+	}
 }
 
 func WithLogLevel(level logger.Level) Options {
@@ -34,12 +38,6 @@ func WithLogLevel(level logger.Level) Options {
 func WithServers(servers ...transport.Server) Options {
 	return func(o *options) {
 		o.Servers = servers
-	}
-}
-
-func WithAppId(appId string) Options {
-	return func(o *options) {
-		o.AppId = appId
 	}
 }
 

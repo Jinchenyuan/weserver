@@ -1,8 +1,8 @@
 http:
   routers:
     api-router:
-      rule: "PathPrefix(`/api`)"
-      service: api-service
+      rule: "PathPrefix(`/admin`)"
+      service: admin-service
       entryPoints:
         - web
 
@@ -27,17 +27,17 @@ http:
         replacement: "/hello.html"
 
   services:
-    api-service:
+    admin-service:
       loadBalancer:
         servers:
-          - url: "http://192.168.1.100:8080"
+          - url: "http://localhost:8082"
 
     account-service:
       loadBalancer:
         servers:
-          - url: "http://192.168.1.101:8080"
+          - url: "http://localhost:8083"
 
     hello-service:
       loadBalancer:
         servers:
-          - url: "http://10.4.11.146:8888"
+          - url: "http://192.168.1.17:8888"

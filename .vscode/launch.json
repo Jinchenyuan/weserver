@@ -1,0 +1,27 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "account",
+            "type": "go",
+            "request": "launch",
+            "mode": "debug",
+            "program": "${workspaceFolder}/account/main.go",
+            "args": ["--env=dev"],
+            "env": {"GIN_MODE": "debug"},
+            "showLog": false,
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "admin",
+            "type": "go",
+            "request": "launch",
+            "mode": "debug",
+            "program": "${workspaceFolder}/admin/main.go",
+            "args": ["--env=dev"],
+            "env": {"GIN_MODE": "debug"},
+            "showLog": false,
+            "console": "integratedTerminal"
+        }
+    ]
+}

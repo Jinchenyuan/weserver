@@ -7,9 +7,6 @@
 *.test
 *.out
 
-# Output of the go coverage tool
-*.html
-
 # Dependency directories
 vendor/
 go/pkg/
@@ -19,7 +16,7 @@ go.work
 
 # IDE specific files
 .idea/
-.vscode/
+settings.json
 *.swp
 *.swo
 
