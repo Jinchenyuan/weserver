@@ -20,7 +20,15 @@ type options struct {
 
 	EtcdConfig clientv3.Config
 
+	dsn string
+
 	Servers []transport.Server
+}
+
+func WithDSN(dsn string) Options {
+	return func(o *options) {
+		o.dsn = dsn
+	}
 }
 
 func WithHttpPort(port int) Options {

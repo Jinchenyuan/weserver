@@ -16,6 +16,7 @@ func main() {
 			Password:    "123456",
 		}),
 		core.WithHttpPort(8083),
+		core.WithDSN("postgres://user:password@localhost:5432/land_contract?sslmode=disable"),
 	)
 	if err := m.Run(); err != nil {
 		fmt.Printf("failed to run mesa: %v\n", err)

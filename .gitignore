@@ -49,3 +49,6 @@ Thumbs.db
 
 # Go modules directory
 go.sum
+
+# postgres
+pgdata
