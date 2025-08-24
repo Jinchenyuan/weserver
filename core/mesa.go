@@ -68,10 +68,6 @@ func New(opts ...Options) *Mesa {
 	ms := micro.NewMicroServer(micro.WithRegistry(reg))
 	WithServers(hs, ms)(&o)
 
-	if err != nil {
-		panic(fmt.Sprintf("failed to create etcd client: %v", err))
-	}
-
 	return &Mesa{
 		opts:    o,
 		retChan: make(chan int),
