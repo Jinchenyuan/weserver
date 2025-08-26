@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"server/core/transport"
 
 	"github.com/gin-gonic/gin"
 )
@@ -25,13 +26,6 @@ func NewHTTPServer(opts ...Options) *Server {
 	}
 
 	r := gin.Default()
-	r.GET("/admin", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{"message": "Hello World, this is Gin admin"})
-	})
-	r.GET("/account", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{"message": "Hello World, this is Gin account."})
-	})
-
 	srv := &http.Server{
 		Addr:    fmt.Sprintf(":%d", o.Port),
 		Handler: r,
@@ -55,6 +49,10 @@ func (s *Server) RegisterRoute(method string, path string, handler gin.HandlerFu
 	default:
 		log.Printf("unsupported method %s for path %s\n", method, path)
 	}
+}
+
+func (s *Server) GetType() transport.NetType {
+	return s.opts.Type
 }
 
 func (s *Server) Start(ctx context.Context) error {

@@ -46,6 +46,7 @@ func New(opts ...Options) *Mesa {
 	hs := http.NewHTTPServer(
 		http.WithHost(net.ParseIP("0.0.0.0")),
 		http.WithPort(o.HttpPort),
+		http.WithType(transport.HTTP),
 	)
 
 	etcdCli, err := clientv3.New(clientv3.Config{
@@ -65,7 +66,10 @@ func New(opts ...Options) *Mesa {
 		opt.Addrs = o.EtcdConfig.Endpoints
 		opt.Context = context.WithValue(context.Background(), etcdClientKey, etcdCli)
 	})
-	ms := micro.NewMicroServer(micro.WithRegistry(reg))
+	ms := micro.NewMicroServer(
+		micro.WithRegistry(reg),
+		micro.WithType(transport.MICRO),
+	)
 	WithServers(hs, ms)(&o)
 
 	return &Mesa{
@@ -123,6 +127,16 @@ func (m *Mesa) startServers() {
 
 	wg.Wait()
 	fmt.Println("All servers have started.")
+}
+
+func (m *Mesa) GetServerByType(typ transport.NetType) transport.Server {
+	for _, server := range m.opts.Servers {
+		s := server.GetType()
+		if s == typ {
+			return server
+		}
+	}
+	return nil
 }
 
 func (m *Mesa) addAccount() {

@@ -2,6 +2,7 @@ package http
 
 import (
 	"net"
+	"server/core/transport"
 )
 
 type Options func(o *options)
@@ -9,6 +10,13 @@ type Options func(o *options)
 type options struct {
 	Host net.IP
 	Port int
+	Type transport.NetType
+}
+
+func WithType(typ transport.NetType) Options {
+	return func(o *options) {
+		o.Type = typ
+	}
 }
 
 func WithHost(host net.IP) Options {
