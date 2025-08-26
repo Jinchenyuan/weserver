@@ -41,6 +41,22 @@ func NewHTTPServer(opts ...Options) *Server {
 	return hs
 }
 
+func (s *Server) RegisterRoute(method string, path string, handler gin.HandlerFunc) {
+	r := s.Handler.(*gin.Engine)
+	switch method {
+	case http.MethodGet:
+		r.GET(path, handler)
+	case http.MethodPost:
+		r.POST(path, handler)
+	case http.MethodPut:
+		r.PUT(path, handler)
+	case http.MethodDelete:
+		r.DELETE(path, handler)
+	default:
+		log.Printf("unsupported method %s for path %s\n", method, path)
+	}
+}
+
 func (s *Server) Start(ctx context.Context) error {
 	go func() {
 		if err := s.ListenAndServe(); err != nil && err != http.ErrServerClosed {
