@@ -52,3 +52,6 @@ go.sum
 
 # postgres
 pgdata
+
+# etcd
+etcd-data
