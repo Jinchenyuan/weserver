@@ -21,3 +21,7 @@
 - [ ] gateway
 - [ ] map
 - [ ] account
+
+### TEST
+1. 本地debug，直接启动launch.json中的配置
+2. 本地k8s集群测试，minikube

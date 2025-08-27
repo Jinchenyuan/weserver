@@ -5,11 +5,11 @@ import (
 	"database/sql"
 	"fmt"
 	"net"
-	"server/account/model"
 	"server/core/transport"
 	"server/core/transport/http"
 	"server/core/transport/micro"
-	"server/third_part/etcd"
+	"server/model"
+	"server/third_party/etcd"
 	"sync"
 	"time"
 
