@@ -2,20 +2,15 @@ package core
 
 import (
 	"context"
-	"database/sql"
 	"fmt"
 	"net"
 	"server/core/transport"
 	"server/core/transport/http"
 	"server/core/transport/micro"
-	"server/model"
 	"server/third_party/etcd"
 	"sync"
 	"time"
 
-	"github.com/uptrace/bun"
-	"github.com/uptrace/bun/dialect/pgdialect"
-	"github.com/uptrace/bun/driver/pgdriver"
 	"go-micro.dev/v5/registry"
 	etcdReg "go-micro.dev/v5/registry/etcd"
 	clientv3 "go.etcd.io/etcd/client/v3"
@@ -69,6 +64,7 @@ func New(opts ...Options) *Mesa {
 	ms := micro.NewMicroServer(
 		micro.WithRegistry(reg),
 		micro.WithType(transport.MICRO),
+		micro.WithServiceScheme(o.serviceScheme),
 	)
 	WithServers(hs, ms)(&o)
 
@@ -83,8 +79,6 @@ func (m *Mesa) Run() error {
 	fmt.Println("start mesa!")
 
 	m.startServers()
-
-	m.addAccount()
 
 	<-m.retChan
 
@@ -137,22 +131,4 @@ func (m *Mesa) GetServerByType(typ transport.NetType) transport.Server {
 		}
 	}
 	return nil
-}
-
-func (m *Mesa) addAccount() {
-	sqldb := sql.OpenDB(pgdriver.NewConnector(pgdriver.WithDSN("postgres://user:password@localhost:5432/land_contract?sslmode=disable")))
-	db := bun.NewDB(sqldb, pgdialect.New())
-	defer db.Close()
-
-	account := &model.Account{
-		OwnerID:   1,
-		Balance:   100.0,
-		CreatedAt: time.Now(),
-		UpdatedAt: time.Now(),
-	}
-	account.SetDB(db)
-	err := account.Create(context.Background())
-	if err != nil {
-		fmt.Printf("failed to create account: %v\n", err)
-	}
 }

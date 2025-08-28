@@ -3,6 +3,7 @@ package core
 import (
 	"server/core/logger"
 	"server/core/transport"
+	"server/core/transport/micro"
 
 	clientv3 "go.etcd.io/etcd/client/v3"
 )
@@ -23,6 +24,14 @@ type options struct {
 	dsn string
 
 	Servers []transport.Server
+
+	serviceScheme micro.ServiceScheme
+}
+
+func WithServiceScheme(scheme micro.ServiceScheme) Options {
+	return func(o *options) {
+		o.serviceScheme = scheme
+	}
 }
 
 func WithDSN(dsn string) Options {

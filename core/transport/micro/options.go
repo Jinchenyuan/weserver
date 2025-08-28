@@ -8,9 +8,22 @@ import (
 
 type Options func(o *options)
 
+type ServiceScheme struct {
+	Name    string
+	Version string
+	Port    int
+}
+
 type options struct {
-	reg  registry.Registry
-	Type transport.NetType
+	reg           registry.Registry
+	Type          transport.NetType
+	serviceScheme ServiceScheme
+}
+
+func WithServiceScheme(scheme ServiceScheme) Options {
+	return func(o *options) {
+		o.serviceScheme = scheme
+	}
 }
 
 func WithType(typ transport.NetType) Options {

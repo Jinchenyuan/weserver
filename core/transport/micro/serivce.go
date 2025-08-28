@@ -2,8 +2,14 @@ package micro
 
 import (
 	"context"
+	"fmt"
+	"log"
 	"server/core/transport"
+
+	goMicro "go-micro.dev/v5"
 )
+
+type RegisterHandler func(goMicro.Service) error
 
 type Service struct {
 	opts options
@@ -20,6 +26,22 @@ func NewMicroServer(opts ...Options) *Service {
 	}
 
 	return ms
+}
+
+func (s *Service) RegisterHandler(handler RegisterHandler) {
+	goService := goMicro.NewService(
+		goMicro.Name(s.opts.serviceScheme.Name),
+		goMicro.Address(fmt.Sprintf(":%d", s.opts.serviceScheme.Port)),
+		goMicro.Registry(s.opts.reg),
+	)
+	goService.Init()
+	if err := handler(goService); err != nil {
+		log.Fatalf("RegisterHandler err: %v", err)
+	}
+
+	if err := goService.Run(); err != nil {
+		log.Fatalf("goService.Run err: %v", err)
+	}
 }
 
 func (s *Service) GetType() transport.NetType {
