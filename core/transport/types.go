@@ -4,5 +4,6 @@ type NetType uint8
 
 const (
 	HTTP NetType = iota + 1
-	MICRO
+	MICRO_SERVER
+	MICRO_CLIENT
 )

@@ -5,8 +5,10 @@ import (
 	"database/sql"
 	"fmt"
 	"server/core"
+	"server/core/transport"
 	"server/core/transport/micro"
 	"server/model"
+	"server/service/account/servicehandler"
 	"time"
 
 	"github.com/uptrace/bun"
@@ -31,6 +33,9 @@ func main() {
 			Port:    80103,
 		}),
 	)
+
+	microService := m.GetServerByType(transport.MICRO_SERVER).(*micro.Service)
+	microService.RegisterHandler(servicehandler.Registry)
 
 	addAccount()
 

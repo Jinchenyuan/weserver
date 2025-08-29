@@ -63,7 +63,7 @@ func New(opts ...Options) *Mesa {
 	})
 	ms := micro.NewMicroServer(
 		micro.WithRegistry(reg),
-		micro.WithType(transport.MICRO),
+		micro.WithType(transport.MICRO_SERVER),
 		micro.WithServiceScheme(o.serviceScheme),
 	)
 	WithServers(hs, ms)(&o)

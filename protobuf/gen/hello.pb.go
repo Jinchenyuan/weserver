@@ -2,9 +2,9 @@
 // versions:
 // 	protoc-gen-go v1.36.6
 // 	protoc        v3.21.12
-// source: greeter.proto
+// source: hello.proto
 
-package proto
+package pb
 
 import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
@@ -21,6 +21,7 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+// The request message containing the user's name.
 type HelloRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Name          string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
@@ -30,7 +31,7 @@ type HelloRequest struct {
 
 func (x *HelloRequest) Reset() {
 	*x = HelloRequest{}
-	mi := &file_greeter_proto_msgTypes[0]
+	mi := &file_hello_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -42,7 +43,7 @@ func (x *HelloRequest) String() string {
 func (*HelloRequest) ProtoMessage() {}
 
 func (x *HelloRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_greeter_proto_msgTypes[0]
+	mi := &file_hello_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -55,7 +56,7 @@ func (x *HelloRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use HelloRequest.ProtoReflect.Descriptor instead.
 func (*HelloRequest) Descriptor() ([]byte, []int) {
-	return file_greeter_proto_rawDescGZIP(), []int{0}
+	return file_hello_proto_rawDescGZIP(), []int{0}
 }
 
 func (x *HelloRequest) GetName() string {
@@ -65,6 +66,7 @@ func (x *HelloRequest) GetName() string {
 	return ""
 }
 
+// The response message containing the greetings
 type HelloReply struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Message       string                 `protobuf:"bytes,1,opt,name=message,proto3" json:"message,omitempty"`
@@ -74,7 +76,7 @@ type HelloReply struct {
 
 func (x *HelloReply) Reset() {
 	*x = HelloReply{}
-	mi := &file_greeter_proto_msgTypes[1]
+	mi := &file_hello_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -86,7 +88,7 @@ func (x *HelloReply) String() string {
 func (*HelloReply) ProtoMessage() {}
 
 func (x *HelloReply) ProtoReflect() protoreflect.Message {
-	mi := &file_greeter_proto_msgTypes[1]
+	mi := &file_hello_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -99,7 +101,7 @@ func (x *HelloReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use HelloReply.ProtoReflect.Descriptor instead.
 func (*HelloReply) Descriptor() ([]byte, []int) {
-	return file_greeter_proto_rawDescGZIP(), []int{1}
+	return file_hello_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *HelloReply) GetMessage() string {
@@ -109,66 +111,69 @@ func (x *HelloReply) GetMessage() string {
 	return ""
 }
 
-var File_greeter_proto protoreflect.FileDescriptor
+var File_hello_proto protoreflect.FileDescriptor
 
-const file_greeter_proto_rawDesc = "" +
+const file_hello_proto_rawDesc = "" +
 	"\n" +
-	"\rgreeter.proto\x12\agreeter\"\"\n" +
+	"\vhello.proto\x12\x02pb\"\"\n" +
 	"\fHelloRequest\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\"&\n" +
 	"\n" +
 	"HelloReply\x12\x18\n" +
-	"\amessage\x18\x01 \x01(\tR\amessage2A\n" +
-	"\aGreeter\x126\n" +
-	"\bSayHello\x12\x15.greeter.HelloRequest\x1a\x13.greeter.HelloReplyB-Z+github.com/chenyuan-jin/lcserver/core/protob\x06proto3"
+	"\amessage\x18\x01 \x01(\tR\amessage2n\n" +
+	"\aGreeter\x12.\n" +
+	"\bSayHello\x12\x10.pb.HelloRequest\x1a\x0e.pb.HelloReply\"\x00\x123\n" +
+	"\rSayHelloAgain\x12\x10.pb.HelloRequest\x1a\x0e.pb.HelloReply\"\x00B\x12Z\x10server/gen/pb;pbb\x06proto3"
 
 var (
-	file_greeter_proto_rawDescOnce sync.Once
-	file_greeter_proto_rawDescData []byte
+	file_hello_proto_rawDescOnce sync.Once
+	file_hello_proto_rawDescData []byte
 )
 
-func file_greeter_proto_rawDescGZIP() []byte {
-	file_greeter_proto_rawDescOnce.Do(func() {
-		file_greeter_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_greeter_proto_rawDesc), len(file_greeter_proto_rawDesc)))
+func file_hello_proto_rawDescGZIP() []byte {
+	file_hello_proto_rawDescOnce.Do(func() {
+		file_hello_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_hello_proto_rawDesc), len(file_hello_proto_rawDesc)))
 	})
-	return file_greeter_proto_rawDescData
+	return file_hello_proto_rawDescData
 }
 
-var file_greeter_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
-var file_greeter_proto_goTypes = []any{
-	(*HelloRequest)(nil), // 0: greeter.HelloRequest
-	(*HelloReply)(nil),   // 1: greeter.HelloReply
+var file_hello_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+var file_hello_proto_goTypes = []any{
+	(*HelloRequest)(nil), // 0: pb.HelloRequest
+	(*HelloReply)(nil),   // 1: pb.HelloReply
 }
-var file_greeter_proto_depIdxs = []int32{
-	0, // 0: greeter.Greeter.SayHello:input_type -> greeter.HelloRequest
-	1, // 1: greeter.Greeter.SayHello:output_type -> greeter.HelloReply
-	1, // [1:2] is the sub-list for method output_type
-	0, // [0:1] is the sub-list for method input_type
+var file_hello_proto_depIdxs = []int32{
+	0, // 0: pb.Greeter.SayHello:input_type -> pb.HelloRequest
+	0, // 1: pb.Greeter.SayHelloAgain:input_type -> pb.HelloRequest
+	1, // 2: pb.Greeter.SayHello:output_type -> pb.HelloReply
+	1, // 3: pb.Greeter.SayHelloAgain:output_type -> pb.HelloReply
+	2, // [2:4] is the sub-list for method output_type
+	0, // [0:2] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
 	0, // [0:0] is the sub-list for extension extendee
 	0, // [0:0] is the sub-list for field type_name
 }
 
-func init() { file_greeter_proto_init() }
-func file_greeter_proto_init() {
-	if File_greeter_proto != nil {
+func init() { file_hello_proto_init() }
+func file_hello_proto_init() {
+	if File_hello_proto != nil {
 		return
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: unsafe.Slice(unsafe.StringData(file_greeter_proto_rawDesc), len(file_greeter_proto_rawDesc)),
+			RawDescriptor: unsafe.Slice(unsafe.StringData(file_hello_proto_rawDesc), len(file_hello_proto_rawDesc)),
 			NumEnums:      0,
 			NumMessages:   2,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
-		GoTypes:           file_greeter_proto_goTypes,
-		DependencyIndexes: file_greeter_proto_depIdxs,
-		MessageInfos:      file_greeter_proto_msgTypes,
+		GoTypes:           file_hello_proto_goTypes,
+		DependencyIndexes: file_hello_proto_depIdxs,
+		MessageInfos:      file_hello_proto_msgTypes,
 	}.Build()
-	File_greeter_proto = out.File
-	file_greeter_proto_goTypes = nil
-	file_greeter_proto_depIdxs = nil
+	File_hello_proto = out.File
+	file_hello_proto_goTypes = nil
+	file_hello_proto_depIdxs = nil
 }
