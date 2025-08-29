@@ -7,12 +7,15 @@ import (
 	"server/core/transport"
 
 	goMicro "go-micro.dev/v5"
+	"go-micro.dev/v5/registry"
 )
 
 type RegisterHandler func(goMicro.Service) error
+type NewServiceClients func(reg registry.Registry) map[string]any
 
 type Service struct {
-	opts options
+	opts    options
+	clients map[string]any
 }
 
 func NewMicroServer(opts ...Options) *Service {
@@ -22,15 +25,30 @@ func NewMicroServer(opts ...Options) *Service {
 	}
 
 	ms := &Service{
-		opts: options{},
+		opts: o,
 	}
 
 	return ms
 }
 
+func (s *Service) GetServiceClient(service transport.ServiceType, key string) any {
+	if s.clients == nil {
+		return nil
+	}
+	mapKey := fmt.Sprintf("%s-%s", string(service), key)
+	if _, ok := s.clients[mapKey]; !ok {
+		return nil
+	}
+	return s.clients[mapKey]
+}
+
+func (s *Service) NewServiceClients(nsc NewServiceClients) {
+	s.clients = nsc(s.opts.reg)
+}
+
 func (s *Service) RegisterHandler(handler RegisterHandler) {
 	goService := goMicro.NewService(
-		goMicro.Name(s.opts.serviceScheme.Name),
+		goMicro.Name(string(s.opts.serviceScheme.Name)),
 		goMicro.Address(fmt.Sprintf(":%d", s.opts.serviceScheme.Port)),
 		goMicro.Registry(s.opts.reg),
 	)

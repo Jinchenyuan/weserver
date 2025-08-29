@@ -7,3 +7,10 @@ const (
 	MICRO_SERVER
 	MICRO_CLIENT
 )
+
+type ServiceType string
+
+const (
+	Account ServiceType = "account"
+	Admin   ServiceType = "admin"
+)

@@ -9,7 +9,7 @@ import (
 type Options func(o *options)
 
 type ServiceScheme struct {
-	Name    string
+	Name    transport.ServiceType
 	Version string
 	Port    int
 }

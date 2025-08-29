@@ -2,7 +2,7 @@ services:
   etcd:
     image: registry.cn-hangzhou.aliyuncs.com/google_containers/etcd:3.5.1-0
     container_name: etcd
-    network_mode: host
+    # network_mode: host
     environment:
       - ETCD_ENABLE_V2=false
       - ETCD_ROOT_PASSWORD=123456
@@ -18,4 +18,6 @@ services:
       --initial-cluster etcd-node=http://0.0.0.0:2380
     volumes:
       - ./etcd-data:/etcd-data
+    ports:
+      - 2379:2379
     restart: unless-stopped

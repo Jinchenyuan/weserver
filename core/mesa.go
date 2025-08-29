@@ -9,11 +9,9 @@ import (
 	"server/core/transport/micro"
 	"server/third_party/etcd"
 	"sync"
-	"time"
 
 	"go-micro.dev/v5/registry"
 	etcdReg "go-micro.dev/v5/registry/etcd"
-	clientv3 "go.etcd.io/etcd/client/v3"
 )
 
 type Mesa struct {
@@ -44,23 +42,27 @@ func New(opts ...Options) *Mesa {
 		http.WithType(transport.HTTP),
 	)
 
-	etcdCli, err := clientv3.New(clientv3.Config{
-		Endpoints:   o.EtcdConfig.Endpoints,
-		Username:    o.EtcdConfig.Username,
-		Password:    o.EtcdConfig.Password,
-		DialTimeout: 5 * time.Second,
-	})
-	if err != nil {
-		panic(fmt.Sprintf("failed to create etcd clientv3: %v", err))
-	}
+	// etcdCli, err := clientv3.New(clientv3.Config{
+	// 	Endpoints:   o.EtcdConfig.Endpoints,
+	// 	Username:    o.EtcdConfig.Username,
+	// 	Password:    o.EtcdConfig.Password,
+	// 	DialTimeout: 5 * time.Second,
+	// })
+	// if err != nil {
+	// 	panic(fmt.Sprintf("failed to create etcd clientv3: %v", err))
+	// }
 	// Define a custom type for the context key to avoid collisions
-	type etcdClientKeyType struct{}
-	var etcdClientKey = etcdClientKeyType{}
+	// type etcdClientKeyType struct{}
+	// var etcdClientKey = etcdClientKeyType{}
 
-	reg := etcdReg.NewEtcdRegistry(func(opt *registry.Options) {
-		opt.Addrs = o.EtcdConfig.Endpoints
-		opt.Context = context.WithValue(context.Background(), etcdClientKey, etcdCli)
-	})
+	// reg := etcdReg.NewEtcdRegistry(func(opt *registry.Options) {
+	// 	opt.Addrs = o.EtcdConfig.Endpoints
+	// 	opt.Context = context.WithValue(context.Background(), etcdClientKey, etcdCli)
+	// })
+	reg := etcdReg.NewEtcdRegistry(
+		registry.Addrs(o.EtcdConfig.Endpoints...),
+		etcdReg.Auth(o.EtcdConfig.Username, o.EtcdConfig.Password),
+	)
 	ms := micro.NewMicroServer(
 		micro.WithRegistry(reg),
 		micro.WithType(transport.MICRO_SERVER),

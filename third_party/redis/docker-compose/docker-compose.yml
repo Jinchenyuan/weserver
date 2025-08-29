@@ -3,7 +3,7 @@ services:
   redis:
     restart: always
     image: redis:7.4.0
-    network_mode: host
+    # network_mode: host
     container_name: redis-label
     volumes:
       - /apps/redis/datadir:/data

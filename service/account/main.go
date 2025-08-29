@@ -28,9 +28,9 @@ func main() {
 		core.WithHttpPort(8093),
 		core.WithDSN("postgres://user:password@localhost:5432/land_contract?sslmode=disable"),
 		core.WithServiceScheme(micro.ServiceScheme{
-			Name:    "account",
+			Name:    transport.Account,
 			Version: "v1",
-			Port:    80103,
+			Port:    8193,
 		}),
 	)
 
