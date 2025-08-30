@@ -19,7 +19,7 @@ func Registry(reg registry.Registry) map[string]any {
 		micro.Registry(reg),
 	)
 	accountService.Init()
-	ret[fmt.Sprintf("%s-%s", string(transport.Account), "greeter")] = pb.NewGreeterService(string(transport.Account), accountService.Client())
+	ret[fmt.Sprintf("%s-%s", string(transport.Account), "account")] = pb.NewAccountService(string(transport.Account), accountService.Client())
 
 	return ret
 }
