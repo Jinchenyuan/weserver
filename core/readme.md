@@ -5,6 +5,6 @@
 - gin
 
 ### 拥有功能
-- [ ] 服务注册/发现
-- [ ] memoryCache
-- [ ] gRPC自动路由
+- [X] 服务注册/发现
+- [ ] memoryCache [go-freelru]
+- [X] gRPC自动路由
