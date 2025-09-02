@@ -1,0 +1,50 @@
+package config
+
+import (
+	"os"
+
+	"github.com/pelletier/go-toml/v2"
+)
+
+type (
+	config struct {
+		Etcd       etcdCfg
+		HTTP       httpCfg
+		PostgreSQL postgreSQLCfg
+		Service    serviceCfg
+	}
+
+	etcdCfg struct {
+		Endpoints []string
+		User      string
+		Password  string
+	}
+
+	httpCfg struct {
+		Port int
+	}
+
+	postgreSQLCfg struct {
+		DSN string
+	}
+
+	serviceCfg struct {
+		Name    string
+		Version string
+		Port    int
+	}
+)
+
+func Read(f string) (*config, error) {
+	data, err := os.ReadFile(f)
+	if err != nil {
+		return nil, err
+	}
+
+	var cfg config
+	if err := toml.Unmarshal(data, &cfg); err != nil {
+		return nil, err
+	}
+
+	return &cfg, nil
+}

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"server/core"
+	"server/core/config"
 	"server/core/transport"
 	mesaHttp "server/core/transport/http"
 	"time"
@@ -13,15 +14,21 @@ import (
 )
 
 func main() {
+	cfg, err := config.Read("config.toml")
+	if err != nil {
+		fmt.Printf("failed to read config: %v\n", err)
+		return
+	}
+
 	m := core.New(
 		core.WithEtcdConfig(clientv3.Config{
-			Endpoints:   []string{"127.0.0.1:2379"},
+			Endpoints:   cfg.Etcd.Endpoints,
 			DialTimeout: 5 * time.Second,
-			Username:    "root",
-			Password:    "123456",
+			Username:    cfg.Etcd.User,
+			Password:    cfg.Etcd.Password,
 		}),
-		core.WithHttpPort(8082),
-		core.WithDSN("postgres://user:password@localhost:5432/land_contract?sslmode=disable"),
+		core.WithHttpPort(cfg.HTTP.Port),
+		core.WithDSN(cfg.PostgreSQL.DSN),
 	)
 
 	httpServer := m.GetServerByType(transport.HTTP).(*mesaHttp.Server)

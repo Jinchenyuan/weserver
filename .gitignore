@@ -55,3 +55,6 @@ pgdata
 
 # etcd
 etcd-data
+
+#config
+config.toml

@@ -1,0 +1,15 @@
+[etcd]
+endpoints = ["http://localhost:2379"]
+user = "root"
+password = "123456"
+
+[http]
+port = 8092
+
+[postgreSQL]
+dsn = "postgres://user:password@localhost:5432/land_contract?sslmode=disable"
+
+[service]
+name = "admin"
+version = "v1"
+port = 8192

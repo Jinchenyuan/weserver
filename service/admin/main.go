@@ -3,21 +3,34 @@ package main
 import (
 	"fmt"
 	"server/core"
+	"server/core/config"
+	"server/core/transport"
+	"server/core/transport/micro"
 	"time"
 
 	clientv3 "go.etcd.io/etcd/client/v3"
 )
 
 func main() {
+	cfg, err := config.Read("config.toml")
+	if err != nil {
+		fmt.Printf("failed to read config: %v\n", err)
+		return
+	}
 	m := core.New(
 		core.WithEtcdConfig(clientv3.Config{
-			Endpoints:   []string{"127.0.0.1:2379"},
+			Endpoints:   cfg.Etcd.Endpoints,
 			DialTimeout: 5 * time.Second,
-			Username:    "root",
-			Password:    "123456",
+			Username:    cfg.Etcd.User,
+			Password:    cfg.Etcd.Password,
 		}),
-		core.WithHttpPort(8092),
-		core.WithDSN("postgres://user:password@localhost:5432/land_contract?sslmode=disable"),
+		core.WithHttpPort(cfg.HTTP.Port),
+		core.WithDSN(cfg.PostgreSQL.DSN),
+		core.WithServiceScheme(micro.ServiceScheme{
+			Name:    transport.ServiceType(cfg.Service.Name),
+			Version: cfg.Service.Version,
+			Port:    cfg.Service.Port,
+		}),
 	)
 
 	if err := m.Run(); err != nil {
