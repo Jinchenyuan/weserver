@@ -30,14 +30,14 @@ http:
     admin-service:
       loadBalancer:
         servers:
-          - url: "http://192.168.1.17:8082"
+          - url: "http://192.168.1.66:8082"
 
     account-service:
       loadBalancer:
         servers:
-          - url: "http://192.168.1.17:8083"
+          - url: "http://192.168.1.66:8083"
 
     hello-service:
       loadBalancer:
         servers:
-          - url: "http://192.168.1.17:8888"
+          - url: "http://192.168.1.66:8888"

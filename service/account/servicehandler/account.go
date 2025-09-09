@@ -17,3 +17,8 @@ func (a *Account) Login(ctx context.Context, req *pb.AccountLoginReq, rsp *pb.Ac
 	rsp.Message = "Login successful"
 	return nil
 }
+
+func (a *Account) Hello(ctx context.Context, req *pb.AccountHelloReq, rsp *pb.AccountHelloResp) error {
+	rsp.Message = "Hello, " + req.GetName()
+	return nil
+}

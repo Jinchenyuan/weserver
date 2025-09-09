@@ -21,6 +21,94 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+type AccountHelloReq struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Name          string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AccountHelloReq) Reset() {
+	*x = AccountHelloReq{}
+	mi := &file_server_account_proto_msgTypes[0]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AccountHelloReq) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AccountHelloReq) ProtoMessage() {}
+
+func (x *AccountHelloReq) ProtoReflect() protoreflect.Message {
+	mi := &file_server_account_proto_msgTypes[0]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AccountHelloReq.ProtoReflect.Descriptor instead.
+func (*AccountHelloReq) Descriptor() ([]byte, []int) {
+	return file_server_account_proto_rawDescGZIP(), []int{0}
+}
+
+func (x *AccountHelloReq) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+type AccountHelloResp struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Message       string                 `protobuf:"bytes,1,opt,name=message,proto3" json:"message,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AccountHelloResp) Reset() {
+	*x = AccountHelloResp{}
+	mi := &file_server_account_proto_msgTypes[1]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AccountHelloResp) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AccountHelloResp) ProtoMessage() {}
+
+func (x *AccountHelloResp) ProtoReflect() protoreflect.Message {
+	mi := &file_server_account_proto_msgTypes[1]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AccountHelloResp.ProtoReflect.Descriptor instead.
+func (*AccountHelloResp) Descriptor() ([]byte, []int) {
+	return file_server_account_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *AccountHelloResp) GetMessage() string {
+	if x != nil {
+		return x.Message
+	}
+	return ""
+}
+
 type AccountLoginReq struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Username      string                 `protobuf:"bytes,1,opt,name=username,proto3" json:"username,omitempty"`
@@ -31,7 +119,7 @@ type AccountLoginReq struct {
 
 func (x *AccountLoginReq) Reset() {
 	*x = AccountLoginReq{}
-	mi := &file_server_account_proto_msgTypes[0]
+	mi := &file_server_account_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -43,7 +131,7 @@ func (x *AccountLoginReq) String() string {
 func (*AccountLoginReq) ProtoMessage() {}
 
 func (x *AccountLoginReq) ProtoReflect() protoreflect.Message {
-	mi := &file_server_account_proto_msgTypes[0]
+	mi := &file_server_account_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -56,7 +144,7 @@ func (x *AccountLoginReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AccountLoginReq.ProtoReflect.Descriptor instead.
 func (*AccountLoginReq) Descriptor() ([]byte, []int) {
-	return file_server_account_proto_rawDescGZIP(), []int{0}
+	return file_server_account_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *AccountLoginReq) GetUsername() string {
@@ -84,7 +172,7 @@ type AccountLoginResp struct {
 
 func (x *AccountLoginResp) Reset() {
 	*x = AccountLoginResp{}
-	mi := &file_server_account_proto_msgTypes[1]
+	mi := &file_server_account_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -96,7 +184,7 @@ func (x *AccountLoginResp) String() string {
 func (*AccountLoginResp) ProtoMessage() {}
 
 func (x *AccountLoginResp) ProtoReflect() protoreflect.Message {
-	mi := &file_server_account_proto_msgTypes[1]
+	mi := &file_server_account_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -109,7 +197,7 @@ func (x *AccountLoginResp) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AccountLoginResp.ProtoReflect.Descriptor instead.
 func (*AccountLoginResp) Descriptor() ([]byte, []int) {
-	return file_server_account_proto_rawDescGZIP(), []int{1}
+	return file_server_account_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *AccountLoginResp) GetCode() int32 {
@@ -137,15 +225,20 @@ var File_server_account_proto protoreflect.FileDescriptor
 
 const file_server_account_proto_rawDesc = "" +
 	"\n" +
-	"\x14server_account.proto\x12\x02pb\"I\n" +
+	"\x14server_account.proto\x12\x02pb\"%\n" +
+	"\x0fAccountHelloReq\x12\x12\n" +
+	"\x04name\x18\x01 \x01(\tR\x04name\",\n" +
+	"\x10AccountHelloResp\x12\x18\n" +
+	"\amessage\x18\x01 \x01(\tR\amessage\"I\n" +
 	"\x0fAccountLoginReq\x12\x1a\n" +
 	"\busername\x18\x01 \x01(\tR\busername\x12\x1a\n" +
 	"\bpassword\x18\x02 \x01(\tR\bpassword\"V\n" +
 	"\x10AccountLoginResp\x12\x12\n" +
 	"\x04code\x18\x01 \x01(\x05R\x04code\x12\x14\n" +
 	"\x05token\x18\x02 \x01(\tR\x05token\x12\x18\n" +
-	"\amessage\x18\x03 \x01(\tR\amessage2=\n" +
+	"\amessage\x18\x03 \x01(\tR\amessage2q\n" +
 	"\aAccount\x122\n" +
+	"\x05Hello\x12\x13.pb.AccountHelloReq\x1a\x14.pb.AccountHelloResp\x122\n" +
 	"\x05Login\x12\x13.pb.AccountLoginReq\x1a\x14.pb.AccountLoginRespB\x12Z\x10server/gen/pb;pbb\x06proto3"
 
 var (
@@ -160,16 +253,20 @@ func file_server_account_proto_rawDescGZIP() []byte {
 	return file_server_account_proto_rawDescData
 }
 
-var file_server_account_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+var file_server_account_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
 var file_server_account_proto_goTypes = []any{
-	(*AccountLoginReq)(nil),  // 0: pb.AccountLoginReq
-	(*AccountLoginResp)(nil), // 1: pb.AccountLoginResp
+	(*AccountHelloReq)(nil),  // 0: pb.AccountHelloReq
+	(*AccountHelloResp)(nil), // 1: pb.AccountHelloResp
+	(*AccountLoginReq)(nil),  // 2: pb.AccountLoginReq
+	(*AccountLoginResp)(nil), // 3: pb.AccountLoginResp
 }
 var file_server_account_proto_depIdxs = []int32{
-	0, // 0: pb.Account.Login:input_type -> pb.AccountLoginReq
-	1, // 1: pb.Account.Login:output_type -> pb.AccountLoginResp
-	1, // [1:2] is the sub-list for method output_type
-	0, // [0:1] is the sub-list for method input_type
+	0, // 0: pb.Account.Hello:input_type -> pb.AccountHelloReq
+	2, // 1: pb.Account.Login:input_type -> pb.AccountLoginReq
+	1, // 2: pb.Account.Hello:output_type -> pb.AccountHelloResp
+	3, // 3: pb.Account.Login:output_type -> pb.AccountLoginResp
+	2, // [2:4] is the sub-list for method output_type
+	0, // [0:2] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
 	0, // [0:0] is the sub-list for extension extendee
 	0, // [0:0] is the sub-list for field type_name
@@ -186,7 +283,7 @@ func file_server_account_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_server_account_proto_rawDesc), len(file_server_account_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   2,
+			NumMessages:   4,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

@@ -4,7 +4,16 @@ package pb;
 option go_package = "server/gen/pb;pb";
 
 service Account {
+    rpc Hello(AccountHelloReq) returns (AccountHelloResp);
     rpc Login(AccountLoginReq) returns (AccountLoginResp);
+}
+
+message AccountHelloReq {
+    string name = 1;
+}
+
+message AccountHelloResp {
+    string message = 1;
 }
 
 message AccountLoginReq {

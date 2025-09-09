@@ -28,6 +28,7 @@ var _ server.Option
 // Client API for Account service
 
 type AccountService interface {
+	Hello(ctx context.Context, in *AccountHelloReq, opts ...client.CallOption) (*AccountHelloResp, error)
 	Login(ctx context.Context, in *AccountLoginReq, opts ...client.CallOption) (*AccountLoginResp, error)
 }
 
@@ -43,6 +44,16 @@ func NewAccountService(name string, c client.Client) AccountService {
 	}
 }
 
+func (c *accountService) Hello(ctx context.Context, in *AccountHelloReq, opts ...client.CallOption) (*AccountHelloResp, error) {
+	req := c.c.NewRequest(c.name, "Account.Hello", in)
+	out := new(AccountHelloResp)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *accountService) Login(ctx context.Context, in *AccountLoginReq, opts ...client.CallOption) (*AccountLoginResp, error) {
 	req := c.c.NewRequest(c.name, "Account.Login", in)
 	out := new(AccountLoginResp)
@@ -56,11 +67,13 @@ func (c *accountService) Login(ctx context.Context, in *AccountLoginReq, opts ..
 // Server API for Account service
 
 type AccountHandler interface {
+	Hello(context.Context, *AccountHelloReq, *AccountHelloResp) error
 	Login(context.Context, *AccountLoginReq, *AccountLoginResp) error
 }
 
 func RegisterAccountHandler(s server.Server, hdlr AccountHandler, opts ...server.HandlerOption) error {
 	type account interface {
+		Hello(ctx context.Context, in *AccountHelloReq, out *AccountHelloResp) error
 		Login(ctx context.Context, in *AccountLoginReq, out *AccountLoginResp) error
 	}
 	type Account struct {
@@ -72,6 +85,10 @@ func RegisterAccountHandler(s server.Server, hdlr AccountHandler, opts ...server
 
 type accountHandler struct {
 	AccountHandler
+}
+
+func (h *accountHandler) Hello(ctx context.Context, in *AccountHelloReq, out *AccountHelloResp) error {
+	return h.AccountHandler.Hello(ctx, in, out)
 }
 
 func (h *accountHandler) Login(ctx context.Context, in *AccountLoginReq, out *AccountLoginResp) error {

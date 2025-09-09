@@ -13,7 +13,35 @@ import (
 	mgin "server/core/gin"
 
 	"github.com/gin-gonic/gin"
+	"go-micro.dev/v5/client"
+	"go-micro.dev/v5/metadata"
+	"go-micro.dev/v5/selector"
 )
+
+func AccountHello(c *gin.Context) {
+	m := core.GetGlobalMesa()
+	if m == nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to get global mesa"})
+		return
+	}
+
+	ms := m.GetServerByType(transport.MICRO_SERVER).(*micro.Service)
+	clientAny := ms.GetServiceClient(transport.Account, "account")
+	accountClient, ok := clientAny.(pb.AccountService)
+	if !ok {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to cast to AccountClient"})
+		return
+	}
+	ctx := metadata.NewContext(context.Background(), map[string]string{"id": "123456"})
+	rsp, err := accountClient.Hello(ctx, &pb.AccountHelloReq{Name: "this api account"}, client.WithSelectOption(func(so *selector.SelectOptions) {
+		so.Context = ctx
+	}))
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"message": rsp.GetMessage()})
+}
 
 func AccountLogin(c *gin.Context) {
 	loginReq := &protocol.AccountLoginReq{}
