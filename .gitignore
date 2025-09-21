@@ -58,3 +58,9 @@ etcd-data
 
 #config
 config.toml
+
+# redis
+redis-data
+
+# traefik
+dynamic.yaml
