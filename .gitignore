@@ -63,4 +63,4 @@ config.toml
 redis-data
 
 # traefik
-dynamic.yaml
+dynamic.yml
