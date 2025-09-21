@@ -32,7 +32,7 @@ func AccountHello(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to cast to AccountClient"})
 		return
 	}
-	ctx := metadata.NewContext(context.Background(), map[string]string{"id": "123456"})
+	ctx := metadata.NewContext(context.Background(), map[string]string{"uid": "123456"})
 	rsp, err := accountClient.Hello(ctx, &pb.AccountHelloReq{Name: "this api account"}, client.WithSelectOption(func(so *selector.SelectOptions) {
 		so.Context = ctx
 	}))

@@ -3,6 +3,7 @@ package micro
 import (
 	"errors"
 	"fmt"
+	"hash/fnv"
 	"sync"
 	"time"
 
@@ -72,10 +73,11 @@ func (c *idSelector) Select(service string, opts ...selector.SelectOption) (sele
 		return nil, err
 	}
 
+	var md metadata.Metadata
 	if sopts.Context != nil {
-		if md, ok := metadata.FromContext(sopts.Context); ok {
-			// 打印md
-			fmt.Printf("metadata: %v\n", md)
+		if m, ok := metadata.FromContext(sopts.Context); ok {
+			md = m
+			fmt.Printf("metadata: %+v\n", md)
 		}
 	}
 
@@ -100,7 +102,18 @@ func (c *idSelector) Select(service string, opts ...selector.SelectOption) (sele
 		fmt.Printf("node id: %s\n", n.Id)
 	}
 
-	// TODO: 直接实现一个闭包策略，不允许外部传入策略
+	if key := firstNonEmpty(md["uid"], md["Uid"], md["user-id"], md["x-uid"]); key != "" && len(nodes) > 0 {
+		chosen := hrwPick(key, nodes)
+		if chosen == nil {
+			return nil, selector.ErrNoneAvailable
+		}
+		// Return a Next that always yields the chosen node (sticky mapping).
+		return func() (*registry.Node, error) {
+			return chosen, nil
+		}, nil
+	}
+
+	// fallback to the original strategy
 	return sopts.Strategy(services), nil
 }
 
@@ -120,6 +133,35 @@ func (c *idSelector) Close() error {
 func (c *idSelector) String() string {
 	return "idRegistry"
 }
+
+func hrwPick(key string, nodes []*registry.Node) *registry.Node {
+	var best *registry.Node
+	var bestScore uint64
+	for _, n := range nodes {
+		// score = FNV64a(key + "\x00" + nodeID)
+		h := fnv.New64a()
+		_, _ = h.Write([]byte(key))
+		_, _ = h.Write([]byte{0})
+		_, _ = h.Write([]byte(n.Id))
+		score := h.Sum64()
+		if best == nil || score > bestScore {
+			best = n
+			bestScore = score
+		}
+	}
+	return best
+}
+
+func firstNonEmpty(vals ...string) string {
+	for _, v := range vals {
+		if v != "" {
+			return v
+		}
+	}
+	return ""
+}
+
+// ...existing code...
 
 func newSelector(opts ...selector.Option) selector.Selector {
 	sopts := selector.Options{
