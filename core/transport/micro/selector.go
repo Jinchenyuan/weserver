@@ -91,7 +91,6 @@ func (c *idSelector) Select(service string, opts ...selector.SelectOption) (sele
 		return nil, selector.ErrNoneAvailable
 	}
 
-	// 将 services 展平成 nodes 列表（示例）
 	var nodes []*registry.Node
 	for _, svc := range services {
 		nodes = append(nodes, svc.Nodes...)
