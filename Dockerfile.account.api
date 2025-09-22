@@ -5,7 +5,7 @@
 FROM --platform=$BUILDPLATFORM golang:1.24-alpine AS builder
 WORKDIR /src
 
-RUN go env -w GOPROXY=https://goproxy.cn,direct
+# RUN go env -w GOPROXY=https://goproxy.cn,direct
 
 # Dependencies layer
 COPY go.mod go.sum ./
@@ -17,7 +17,7 @@ COPY . .
 # Build args
 ARG TARGETOS=linux
 ARG TARGETARCH
-ARG MAIN=./api/account/main
+ARG MAIN=./api/account
 ARG BINARY=app
 ARG VERSION=dev
 
@@ -29,8 +29,8 @@ RUN CGO_ENABLED=0 GOOS=$TARGETOS GOARCH=${TARGETARCH:-amd64} \
 FROM alpine:3.20
 WORKDIR /app
 COPY --from=builder /out/app /app/app
+COPY --from=builder /src/api/account/config.toml /app/config.toml
 
 EXPOSE 8083
 
-USER app
 ENTRYPOINT ["/app/app"]

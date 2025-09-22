@@ -1,0 +1,25 @@
+# VCS/IDE
+.git
+.github
+.vscode
+.idea
+
+# Node/前端
+**/node_modules
+**/dist
+**/build
+
+# 生成产物/缓存
+bin
+out
+coverage
+tmp
+.cache
+*.log
+
+# 根据需要添加要排除的目录（示例）
+submodule/protocol/gen/csharp
+third_party/etcd/docker-compose
+third_party/postgres/docker-compose
+third_party/redis/docker-compose
+third_party/traefik
