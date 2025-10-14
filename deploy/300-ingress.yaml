@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: api-account
+  namespace: lcserver
+  annotations:
+    kubernetes.io/ingress.class: traefik
+spec:
+  rules:
+    - host: api.127.0.0.1.nip.io
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: api-account
+                port:
+                  number: 8083

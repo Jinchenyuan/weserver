@@ -2,6 +2,8 @@ package ginhandler
 
 import (
 	"context"
+	"fmt"
+	"math/rand"
 	"net/http"
 	"server/core"
 	"server/core/transport"
@@ -32,7 +34,11 @@ func AccountHello(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to cast to AccountClient"})
 		return
 	}
-	ctx := metadata.NewContext(context.Background(), map[string]string{"uid": "123456"})
+	// 随机生成一个6位数的uid
+	uid := rand.Intn(900000) + 100000
+	ctx := metadata.NewContext(context.Background(), map[string]string{"uid": fmt.Sprintf("%d", uid)})
+	// For testing, use a fixed ui
+	// ctx := metadata.NewContext(context.Background(), map[string]string{"uid": "123456"})
 	rsp, err := accountClient.Hello(ctx, &pb.AccountHelloReq{Name: "this api account"}, client.WithSelectOption(func(so *selector.SelectOptions) {
 		so.Context = ctx
 	}))

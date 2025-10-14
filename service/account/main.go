@@ -41,10 +41,10 @@ func main() {
 		}),
 	)
 
+	core.SetGlobalMesa(m)
+
 	microService := m.GetServerByType(transport.MICRO_SERVER).(*micro.Service)
 	microService.RegisterHandler(servicehandler.Registry)
-
-	addAccount()
 
 	if err := m.Run(); err != nil {
 		fmt.Printf("failed to run mesa: %v\n", err)

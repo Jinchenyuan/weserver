@@ -19,6 +19,7 @@ func (a *Account) Login(ctx context.Context, req *pb.AccountLoginReq, rsp *pb.Ac
 }
 
 func (a *Account) Hello(ctx context.Context, req *pb.AccountHelloReq, rsp *pb.AccountHelloResp) error {
+	fmt.Printf("Hello request received: name=%s\n", req.GetName())
 	rsp.Message = "Hello, " + req.GetName()
 	return nil
 }

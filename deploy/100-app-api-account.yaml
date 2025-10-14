@@ -1,0 +1,45 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-api-account
+  namespace: lcserver
+  labels:
+    app: app-api-account
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app-api-account
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: app-api-account
+    spec:
+      terminationGracePeriodSeconds: 300
+      containers:
+        - name: account-api
+          image: 192.168.1.66:7090/lcserver/account-api:dev
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8083
+              name: http
+              protocol: TCP
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+          volumeMounts:
+            - name: config
+              mountPath: /app/config.toml
+              subPath: api-account-config.toml
+              readOnly: true
+      volumes:
+        - name: config
+          configMap:
+            name: config

@@ -57,9 +57,12 @@ func (s *Service) RegisterHandler(handler RegisterHandler) {
 		log.Fatalf("RegisterHandler err: %v", err)
 	}
 
-	if err := goService.Run(); err != nil {
-		log.Fatalf("goService.Run err: %v", err)
-	}
+	go func() {
+		if err := goService.Run(); err != nil {
+			log.Fatalf("goService.Run err: %v", err)
+		}
+	}()
+
 }
 
 func (s *Service) GetType() transport.NetType {

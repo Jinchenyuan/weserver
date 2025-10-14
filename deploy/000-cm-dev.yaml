@@ -1,0 +1,40 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: lcserver
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: config
+  namespace: lcserver
+data:
+  api-account-config.toml: |-
+    [etcd]
+    endpoints = ["192.168.1.66:2379"]
+    user = "root"
+    password = "123456"
+
+    [http]
+    port = 8083
+
+    [postgreSQL]
+    dsn = "postgres://user:password@192.168.1.66:5432/land_contract?sslmode=disable"
+  service-account-config.toml: |-
+    [etcd]
+    endpoints = ["192.168.1.66:2379"]
+    user = "root"
+    password = "123456"
+
+    [http]
+    port = 8093
+
+    [postgreSQL]
+    dsn = "postgres://user:password@192.168.1.66:5432/land_contract?sslmode=disable"
+
+    [service]
+    name = "account"
+    version = "v1"
+    port = 8193
