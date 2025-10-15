@@ -28,7 +28,7 @@ func AccountHello(c *gin.Context) {
 	}
 
 	ms := m.GetServerByType(transport.MICRO_SERVER).(*micro.Service)
-	clientAny := ms.GetServiceClient(transport.Account, "account")
+	clientAny := ms.GetServiceClient(transport.Account)
 	accountClient, ok := clientAny.(pb.AccountService)
 	if !ok {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to cast to AccountClient"})
@@ -63,7 +63,7 @@ func AccountLogin(c *gin.Context) {
 	}
 
 	ms := m.GetServerByType(transport.MICRO_SERVER).(*micro.Service)
-	clientAny := ms.GetServiceClient(transport.Account, "account")
+	clientAny := ms.GetServiceClient(transport.Account)
 	accountClient, ok := clientAny.(pb.AccountService)
 	if !ok {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to cast to AccountClient"})

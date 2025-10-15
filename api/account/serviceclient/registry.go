@@ -2,6 +2,7 @@ package serviceclient
 
 import (
 	"fmt"
+	"server/core/config"
 	"server/core/transport"
 	pb "server/protobuf/gen"
 
@@ -12,6 +13,10 @@ import (
 )
 
 func Registry(reg registry.Registry) map[string]any {
+	cfg, err := config.Read("config.toml")
+	if err != nil {
+		panic(fmt.Sprintf("failed to read config: %v", err))
+	}
 	ret := make(map[string]any)
 
 	// account
@@ -22,7 +27,7 @@ func Registry(reg registry.Registry) map[string]any {
 		micro.Selector(coremicro.NewSelectorDependId(reg)),
 	)
 	accountService.Init()
-	ret[fmt.Sprintf("%s-%s", string(transport.Account), "account")] = pb.NewAccountService(string(transport.Account), accountService.Client())
+	ret[string(transport.Account)] = pb.NewAccountService(cfg.Services.Account, accountService.Client())
 
 	return ret
 }

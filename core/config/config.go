@@ -12,6 +12,7 @@ type (
 		HTTP       httpCfg
 		PostgreSQL postgreSQLCfg
 		Service    serviceCfg
+		Services   servicesCfg
 	}
 
 	etcdCfg struct {
@@ -32,6 +33,10 @@ type (
 		Name    string
 		Version string
 		Port    int
+	}
+
+	servicesCfg struct {
+		Account string
 	}
 )
 

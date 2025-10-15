@@ -31,15 +31,14 @@ func NewMicroServer(opts ...Options) *Service {
 	return ms
 }
 
-func (s *Service) GetServiceClient(service transport.ServiceType, key string) any {
+func (s *Service) GetServiceClient(service transport.ServiceType) any {
 	if s.clients == nil {
 		return nil
 	}
-	mapKey := fmt.Sprintf("%s-%s", string(service), key)
-	if _, ok := s.clients[mapKey]; !ok {
+	if _, ok := s.clients[string(service)]; !ok {
 		return nil
 	}
-	return s.clients[mapKey]
+	return s.clients[string(service)]
 }
 
 func (s *Service) NewServiceClients(nsc NewServiceClients) {
