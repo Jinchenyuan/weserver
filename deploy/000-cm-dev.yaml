@@ -22,6 +22,9 @@ data:
 
     [postgreSQL]
     dsn = "postgres://user:password@192.168.1.66:5432/land_contract?sslmode=disable"
+
+    [services]
+    account = "account-k3d"
   service-account-config.toml: |-
     [etcd]
     endpoints = ["192.168.1.66:2379"]
@@ -35,6 +38,6 @@ data:
     dsn = "postgres://user:password@192.168.1.66:5432/land_contract?sslmode=disable"
 
     [service]
-    name = "account"
+    name = "account-k3d"
     version = "v1"
     port = 8193

@@ -8,7 +8,7 @@
 - [X] 服务注册/发现
 - [ ] memoryCache [go-freelru]
 - [X] go-micro
-- [ ] api 服务选择策略
+- [X] api 服务选择策略
 
 #### api 服务选择策略
 - 尽量做到负载均衡

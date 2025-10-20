@@ -27,6 +27,7 @@ settings.json
 # Build output
 bin/
 dist/
+Debug/
 
 # Test output
 coverage.txt
