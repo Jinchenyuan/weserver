@@ -4,11 +4,14 @@ import (
 	"context"
 	"fmt"
 	"net"
+	"os"
+	"os/signal"
 	"server/core/transport"
 	"server/core/transport/http"
 	"server/core/transport/micro"
 	"server/third_party/etcd"
 	"sync"
+	"syscall"
 
 	"go-micro.dev/v5/registry"
 	etcdReg "go-micro.dev/v5/registry/etcd"
@@ -65,27 +68,21 @@ func (m *Mesa) Run() error {
 
 	m.startServers()
 
+	go m.waitForStop()
+
 	<-m.retChan
 
 	return nil
 }
 
-func (m *Mesa) Stop() error {
-	fmt.Println("stop mesa!")
-
-	m.retChan <- 1
-
+func (m *Mesa) GetServerByType(typ transport.NetType) transport.Server {
 	for _, server := range m.opts.Servers {
-		server.Stop(context.TODO())
+		s := server.GetType()
+		if s == typ {
+			return server
+		}
 	}
-
-	m.etcdCtl.Close()
-
 	return nil
-}
-
-func (m *Mesa) GetEtcdCtl() *etcd.Ctl {
-	return m.etcdCtl
 }
 
 func (m *Mesa) startServers() {
@@ -108,12 +105,20 @@ func (m *Mesa) startServers() {
 	fmt.Println("All servers have started.")
 }
 
-func (m *Mesa) GetServerByType(typ transport.NetType) transport.Server {
+func (m *Mesa) waitForStop() {
+	sigChan := make(chan os.Signal, 1)
+	signal.Notify(sigChan, syscall.SIGINT, syscall.SIGTERM, syscall.SIGHUP)
+
+	sig := <-sigChan
+	fmt.Printf("Received signal: %v. Shutting down servers...\n", sig)
+
 	for _, server := range m.opts.Servers {
-		s := server.GetType()
-		if s == typ {
-			return server
-		}
+		server.Stop(context.TODO())
 	}
-	return nil
+
+	m.etcdCtl.Close()
+
+	m.retChan <- 1
+
+	fmt.Println("Mesa has shut down.")
 }
