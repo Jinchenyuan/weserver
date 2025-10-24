@@ -63,14 +63,19 @@ func (s *Service) GetType() transport.NetType {
 }
 
 func (s *Service) Start(ctx context.Context) error {
-	go func() {
-		if err := s.service.Run(); err != nil {
-			log.Fatalf("s.service.Run err: %v", err)
-		}
-	}()
-	return nil
-}
+	if s.service == nil {
+		return nil
+	}
+	if err := s.service.Server().Start(); err != nil {
+		return err
+	}
 
-func (s *Service) Stop(ctx context.Context) error {
+	go func() {
+		<-ctx.Done()
+		if err := s.service.Server().Stop(); err != nil {
+			fmt.Printf("micro service stop err: %v\n", err)
+		}
+		s.service = nil
+	}()
 	return nil
 }

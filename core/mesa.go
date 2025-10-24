@@ -18,9 +18,11 @@ import (
 )
 
 type Mesa struct {
-	opts    options
-	retChan chan int
-	etcdCtl *etcd.Ctl
+	opts          options
+	retChan       chan int
+	etcdCtl       *etcd.Ctl
+	serversCtx    context.Context
+	serversCancel context.CancelFunc
 }
 
 func New(opts ...Options) *Mesa {
@@ -87,16 +89,15 @@ func (m *Mesa) GetServerByType(typ transport.NetType) transport.Server {
 
 func (m *Mesa) startServers() {
 	var wg sync.WaitGroup
-	ctx, cancel := context.WithCancel(context.Background())
-	defer cancel()
+	m.serversCtx, m.serversCancel = context.WithCancel(context.Background())
 
 	for _, server := range m.opts.Servers {
 		wg.Add(1)
 		go func(s transport.Server) {
 			defer wg.Done()
-			if err := s.Start(ctx); err != nil {
+			if err := s.Start(m.serversCtx); err != nil {
 				fmt.Printf("server failed to start: %v\n", err)
-				cancel() // Cancel context if any server fails
+				m.serversCancel() // Cancel context if any server fails
 			}
 		}(server)
 	}
@@ -112,9 +113,7 @@ func (m *Mesa) waitForStop() {
 	sig := <-sigChan
 	fmt.Printf("Received signal: %v. Shutting down servers...\n", sig)
 
-	for _, server := range m.opts.Servers {
-		server.Stop(context.TODO())
-	}
+	m.serversCancel()
 
 	m.etcdCtl.Close()
 

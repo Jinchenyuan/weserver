@@ -57,19 +57,19 @@ func (s *Server) GetType() transport.NetType {
 
 func (s *Server) Start(ctx context.Context) error {
 	go func() {
+		<-ctx.Done()
+		if err := s.Shutdown(context.Background()); err != nil {
+			log.Printf("http server shutdown failed:%s\n", err)
+		} else {
+			log.Printf("http server shutdown success\n")
+		}
+	}()
+
+	go func() {
 		if err := s.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 			log.Fatalf("listen %s\n", err)
 		}
 	}()
 
-	return nil
-}
-
-func (s *Server) Stop(ctx context.Context) error {
-	if err := s.Shutdown(ctx); err != nil {
-		fmt.Printf("http server shutdown failed:%s\n", err)
-		return err
-	}
-	fmt.Printf("http server shutdown success\n")
 	return nil
 }
