@@ -16,6 +16,7 @@ type NewServiceClients func(reg registry.Registry) map[string]any
 type Service struct {
 	opts    options
 	clients map[string]any
+	service goMicro.Service
 }
 
 func NewMicroServer(opts ...Options) *Service {
@@ -46,22 +47,15 @@ func (s *Service) NewServiceClients(nsc NewServiceClients) {
 }
 
 func (s *Service) RegisterHandler(handler RegisterHandler) {
-	goService := goMicro.NewService(
+	s.service = goMicro.NewService(
 		goMicro.Name(string(s.opts.serviceScheme.Name)),
 		goMicro.Address(fmt.Sprintf(":%d", s.opts.serviceScheme.Port)),
 		goMicro.Registry(s.opts.reg),
 	)
-	goService.Init()
-	if err := handler(goService); err != nil {
+	s.service.Init()
+	if err := handler(s.service); err != nil {
 		log.Fatalf("RegisterHandler err: %v", err)
 	}
-
-	go func() {
-		if err := goService.Run(); err != nil {
-			log.Fatalf("goService.Run err: %v", err)
-		}
-	}()
-
 }
 
 func (s *Service) GetType() transport.NetType {
@@ -69,6 +63,11 @@ func (s *Service) GetType() transport.NetType {
 }
 
 func (s *Service) Start(ctx context.Context) error {
+	go func() {
+		if err := s.service.Run(); err != nil {
+			log.Fatalf("s.service.Run err: %v", err)
+		}
+	}()
 	return nil
 }
 

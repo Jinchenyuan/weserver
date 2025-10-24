@@ -26,19 +26,6 @@
             },
             "showLog": false,
             "console": "integratedTerminal"
-        },
-        {
-            "name": "api admin",
-            "type": "go",
-            "request": "launch",
-            "mode": "debug",
-            "program": "${workspaceFolder}/api/admin/main.go",
-            "env": {
-                "GIN_MODE": "debug",
-                "ENV": "dev"
-            },
-            "showLog": false,
-            "console": "integratedTerminal"
         }
     ]
 }
