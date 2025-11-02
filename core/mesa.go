@@ -2,6 +2,7 @@ package core
 
 import (
 	"context"
+	"database/sql"
 	"fmt"
 	"net"
 	"os"
@@ -12,7 +13,11 @@ import (
 	"server/third_party/etcd"
 	"sync"
 	"syscall"
+	"time"
 
+	"github.com/uptrace/bun"
+	"github.com/uptrace/bun/dialect/pgdialect"
+	"github.com/uptrace/bun/driver/pgdriver"
 	"go-micro.dev/v5/registry"
 	etcdReg "go-micro.dev/v5/registry/etcd"
 )
@@ -23,6 +28,7 @@ type Mesa struct {
 	etcdCtl       *etcd.Ctl
 	serversCtx    context.Context
 	serversCancel context.CancelFunc
+	DB            *bun.DB
 }
 
 func New(opts ...Options) *Mesa {
@@ -39,6 +45,11 @@ func New(opts ...Options) *Mesa {
 	}, etcd.WithEndpoints(o.EtcdConfig.Endpoints), etcd.WithAuth(o.EtcdConfig.Username, o.EtcdConfig.Password))
 	if err != nil {
 		panic(fmt.Sprintf("failed to create etcd controller: %v", err))
+	}
+
+	db, err := newDB(o.dsn)
+	if err != nil {
+		panic(fmt.Sprintf("failed to connect to database: %v", err))
 	}
 
 	hs := http.NewHTTPServer(
@@ -62,6 +73,7 @@ func New(opts ...Options) *Mesa {
 		opts:    o,
 		retChan: make(chan int),
 		etcdCtl: etcdCtl,
+		DB:      db,
 	}
 }
 
@@ -83,6 +95,36 @@ func (m *Mesa) GetServerByType(typ transport.NetType) transport.Server {
 		if s == typ {
 			return server
 		}
+	}
+	return nil
+}
+
+func newDB(dsn string) (*bun.DB, error) {
+	conn := pgdriver.NewConnector(
+		pgdriver.WithDSN(dsn),
+		pgdriver.WithDialTimeout(5*time.Second),
+	)
+	sqldb := sql.OpenDB(conn)
+
+	sqldb.SetMaxOpenConns(50)
+	sqldb.SetMaxIdleConns(25)
+	sqldb.SetConnMaxLifetime(30 * time.Minute)
+	sqldb.SetConnMaxIdleTime(5 * time.Minute)
+
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+	if err := sqldb.PingContext(ctx); err != nil {
+		_ = sqldb.Close()
+		return nil, err
+	}
+
+	db := bun.NewDB(sqldb, pgdialect.New())
+	return db, nil
+}
+
+func (m *Mesa) closeDB() error {
+	if m.DB != nil {
+		return m.DB.Close()
 	}
 	return nil
 }
@@ -116,6 +158,8 @@ func (m *Mesa) waitForStop() {
 	m.serversCancel()
 
 	m.etcdCtl.Close()
+
+	m.closeDB()
 
 	m.retChan <- 1
 

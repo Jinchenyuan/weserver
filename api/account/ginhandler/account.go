@@ -79,7 +79,12 @@ func AccountLogin(c *gin.Context) {
 		return
 	}
 
-	if err := mgin.WriteResponse(c, rsp); err != nil {
+	httpRsp := &protocol.AccountLoginResp{
+		Code:    protocol.ErrorCode(rsp.GetCode()),
+		Token:   rsp.GetToken(),
+		Message: rsp.GetMessage(),
+	}
+	if err := mgin.WriteResponse(c, httpRsp); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 	}
 }

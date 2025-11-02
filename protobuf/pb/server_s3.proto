@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package pb;
+option go_package = "server/gen/pb;pb";
+
+service s3 {
+    rpc PutKey(PutKeyReq) returns (PutKeyResp);
+    rpc GetKey(GetKeyReq) returns (GetKeyResp);
+}
+
+message PutKeyReq {
+    string key = 1;
+    string data = 2;
+}
+
+message PutKeyResp {
+    int32 code = 1;
+    string message = 2;
+}
+
+message GetKeyReq {
+    string key = 1;
+}
+
+message GetKeyResp {
+    int32 code = 1;
+    string data = 2;
+    string message = 3;
+}

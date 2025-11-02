@@ -37,6 +37,7 @@ type (
 
 	servicesCfg struct {
 		Account string
+		S3      string
 	}
 )
 

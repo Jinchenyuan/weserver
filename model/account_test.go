@@ -12,7 +12,7 @@ import (
 )
 
 func TestAddAccount(t *testing.T) {
-	sqlDb := sql.OpenDB(pgdriver.NewConnector(pgdriver.WithDSN("postgres://user:password@10.4.11.140:5432/land_contract?sslmode=disable")))
+	sqlDb := sql.OpenDB(pgdriver.NewConnector(pgdriver.WithDSN("postgres://user:password@localhost:5432/land_contract?sslmode=disable")))
 	db := bun.NewDB(sqlDb, pgdialect.New())
 	defer db.Close()
 

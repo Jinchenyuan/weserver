@@ -18,6 +18,7 @@
   <ItemGroup>
     <Protobuf Include="../../submodule/protocol/pb/account.proto" ProtoRoot="../../submodule/protocol/pb" GrpcServices="None" />
     <Protobuf Include="../../submodule/protocol/pb/error.proto" ProtoRoot="../../submodule/protocol/pb" GrpcServices="None" />
+    <Protobuf Include="../../submodule/protocol/pb/s3.proto" ProtoRoot="../../submodule/protocol/pb" GrpcServices="None" />
   </ItemGroup>
 
 </Project>

@@ -12,6 +12,12 @@ http:
       entryPoints:
         - web
 
+    s3-router:
+      rule: "PathPrefix(`/s3`)"
+      service: s3-service
+      entryPoints:
+        - web
+
     hello-router:
       rule: "Path(`/hello`)"           # 精确匹配 /hello
       service: hello-service
@@ -30,14 +36,19 @@ http:
     admin-service:
       loadBalancer:
         servers:
-          - url: "http://192.168.1.66:8082"
+          - url: "http://192.168.1.80:8082"
 
     account-service:
       loadBalancer:
         servers:
-          - url: "http://192.168.1.66:8083"
+          - url: "http://192.168.1.80:8083"
+
+    s3-service:
+      loadBalancer:
+        servers:
+          - url: "http://192.168.1.80:8084"
 
     hello-service:
       loadBalancer:
         servers:
-          - url: "http://192.168.1.66:8888"
+          - url: "http://192.168.1.80:8888"
