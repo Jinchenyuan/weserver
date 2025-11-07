@@ -41,3 +41,33 @@ data:
     name = "account-k3d"
     version = "v1"
     port = 8193
+  api-s3-config.toml: |-
+    [etcd]
+    endpoints = ["192.168.1.66:2379"]
+    user = "root"
+    password = "123456"
+
+    [http]
+    port = 8084
+
+    [postgreSQL]
+    dsn = "postgres://user:password@192.168.1.66:5432/land_contract?sslmode=disable"
+
+    [services]
+    account = "s3-k3d"
+  service-s3-config.toml: |-
+    [etcd]
+    endpoints = ["192.168.1.66:2379"]
+    user = "root"
+    password = "123456"
+
+    [http]
+    port = 8094
+
+    [postgreSQL]
+    dsn = "postgres://user:password@192.168.1.66:5432/land_contract?sslmode=disable"
+
+    [service]
+    name = "s3-k3d"
+    version = "v1"
+    port = 8194

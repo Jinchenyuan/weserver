@@ -19,7 +19,7 @@ COPY . .
 # Build args
 ARG TARGETOS=linux
 ARG TARGETARCH
-ARG MAIN=./service/account
+ARG MAIN=./api/account
 ARG BINARY=app
 ARG VERSION=dev
 
@@ -31,8 +31,8 @@ RUN CGO_ENABLED=0 GOOS=$TARGETOS GOARCH=${TARGETARCH:-amd64} \
 FROM alpine:3.20
 WORKDIR /app
 COPY --from=builder /out/app /app/app
-COPY --from=builder /src/service/account/config.toml /app/config.toml
+COPY --from=builder /src/api/s3/config.toml /app/config.toml
 
-EXPOSE 8093
+EXPOSE 8084
 
 ENTRYPOINT ["/app/app"]

@@ -14,3 +14,20 @@ spec:
       targetPort: 8083
       nodePort: 32083
       protocol: TCP
+
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: api-s3
+  namespace: lcserver
+spec:
+  type: NodePort
+  externalTrafficPolicy: Local
+  selector:
+    app: app-api-s3
+  ports:
+    - port: 8084
+      targetPort: 8084
+      nodePort: 32084
+      protocol: TCP

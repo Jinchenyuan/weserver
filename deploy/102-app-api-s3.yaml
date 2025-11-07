@@ -1,0 +1,45 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-api-s3
+  namespace: lcserver
+  labels:
+    app: app-api-s3
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app-api-s3
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: app-api-s3
+    spec:
+      terminationGracePeriodSeconds: 300
+      containers:
+        - name: s3-api
+          image: 192.168.1.66:7090/lcserver/s3-api:dev
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8084
+              name: http
+              protocol: TCP
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+          volumeMounts:
+            - name: config
+              mountPath: /app/config.toml
+              subPath: api-s3-config.toml
+              readOnly: true
+      volumes:
+        - name: config
+          configMap:
+            name: config

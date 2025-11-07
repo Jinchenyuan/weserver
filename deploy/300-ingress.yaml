@@ -10,10 +10,17 @@ spec:
     - host: api.127.0.0.1.nip.io
       http:
         paths:
-          - path: /
+          - path: /account
             pathType: Prefix
             backend:
               service:
                 name: api-account
                 port:
                   number: 8083
+          - path: /s3
+            pathType: Prefix
+            backend:
+              service:
+                name: s3-account
+                port:
+                  number: 8084
