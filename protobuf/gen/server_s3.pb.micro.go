@@ -30,6 +30,7 @@ var _ server.Option
 type S3Service interface {
 	PutKey(ctx context.Context, in *PutKeyReq, opts ...client.CallOption) (*PutKeyResp, error)
 	GetKey(ctx context.Context, in *GetKeyReq, opts ...client.CallOption) (*GetKeyResp, error)
+	DeleteKey(ctx context.Context, in *DeleteKeyReq, opts ...client.CallOption) (*DeleteKeyResp, error)
 }
 
 type s3Service struct {
@@ -64,17 +65,29 @@ func (c *s3Service) GetKey(ctx context.Context, in *GetKeyReq, opts ...client.Ca
 	return out, nil
 }
 
+func (c *s3Service) DeleteKey(ctx context.Context, in *DeleteKeyReq, opts ...client.CallOption) (*DeleteKeyResp, error) {
+	req := c.c.NewRequest(c.name, "S3.DeleteKey", in)
+	out := new(DeleteKeyResp)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // Server API for S3 service
 
 type S3Handler interface {
 	PutKey(context.Context, *PutKeyReq, *PutKeyResp) error
 	GetKey(context.Context, *GetKeyReq, *GetKeyResp) error
+	DeleteKey(context.Context, *DeleteKeyReq, *DeleteKeyResp) error
 }
 
 func RegisterS3Handler(s server.Server, hdlr S3Handler, opts ...server.HandlerOption) error {
 	type s3 interface {
 		PutKey(ctx context.Context, in *PutKeyReq, out *PutKeyResp) error
 		GetKey(ctx context.Context, in *GetKeyReq, out *GetKeyResp) error
+		DeleteKey(ctx context.Context, in *DeleteKeyReq, out *DeleteKeyResp) error
 	}
 	type S3 struct {
 		s3
@@ -93,4 +106,8 @@ func (h *s3Handler) PutKey(ctx context.Context, in *PutKeyReq, out *PutKeyResp) 
 
 func (h *s3Handler) GetKey(ctx context.Context, in *GetKeyReq, out *GetKeyResp) error {
 	return h.S3Handler.GetKey(ctx, in, out)
+}
+
+func (h *s3Handler) DeleteKey(ctx context.Context, in *DeleteKeyReq, out *DeleteKeyResp) error {
+	return h.S3Handler.DeleteKey(ctx, in, out)
 }

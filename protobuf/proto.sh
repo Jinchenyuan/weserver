@@ -1,4 +1,5 @@
 # go install github.com/micro/micro/v5/cmd/protoc-gen-micro@latest
+#!/bin/bash
 
 set -euo pipefail
 

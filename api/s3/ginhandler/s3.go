@@ -93,3 +93,42 @@ func GetKey(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 	}
 }
+
+func DeleteKey(c *gin.Context) {
+	deleteKeyReq := &protocol.S3DeleteKeyReq{}
+	if err := mgin.ReadRequest(c, deleteKeyReq); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	m := core.GetGlobalMesa()
+	if m == nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to get global mesa"})
+		return
+	}
+
+	ms := m.GetServerByType(transport.MICRO_SERVER).(*micro.Service)
+	clientAny := ms.GetServiceClient(transport.S3)
+	s3Client, ok := clientAny.(pb.S3Service)
+	if !ok {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to get s3 client"})
+		return
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	rsp, err := s3Client.DeleteKey(ctx, &pb.DeleteKeyReq{Key: deleteKeyReq.Key})
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	httpRsp := &protocol.S3DeleteKeyResp{
+		Code:    protocol.ErrorCode(rsp.GetCode()),
+		Message: rsp.GetMessage(),
+	}
+	if err := mgin.WriteResponse(c, httpRsp); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+	}
+}

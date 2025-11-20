@@ -16,6 +16,7 @@ func Registry() error {
 
 	hs.RegisterRoute("POST", "/s3/PutKey", PutKey)
 	hs.RegisterRoute("POST", "/s3/GetKey", GetKey)
+	hs.RegisterRoute("POST", "/s3/DeleteKey", DeleteKey)
 
 	return nil
 }
