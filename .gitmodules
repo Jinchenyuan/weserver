@@ -1,8 +1,4 @@
 [submodule "submodule/protocol"]
 	path = submodule/protocol
-	url = git@gitee.com:McLiYT/lcprotocol.git
-	branch = master
-[submodule "submodule/config"]
-	path = submodule/config
-	url = git@gitee.com:McLiYT/lcconfig.git
+	url = git@192.168.1.88:2222/ChenyuanJin/weprotocol.git
 	branch = master
