@@ -5,6 +5,11 @@ import (
 	"server/core"
 	"server/core/transport"
 	"server/core/transport/http"
+
+	_ "server/api/s3/docs"
+
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 func Registry() error {
@@ -17,6 +22,8 @@ func Registry() error {
 	hs.RegisterRoute("POST", "/s3/PutKey", PutKey)
 	hs.RegisterRoute("POST", "/s3/GetKey", GetKey)
 	hs.RegisterRoute("POST", "/s3/DeleteKey", DeleteKey)
+
+	hs.GetEngine().GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	return nil
 }

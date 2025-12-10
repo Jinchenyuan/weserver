@@ -10,18 +10,29 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-
-	mgin "server/core/gin"
-	protocol "server/submodule/protocol/gen/golang"
 )
 
-func PutKey(c *gin.Context) {
-	putKeyReq := &protocol.S3PutKeyReq{}
-	if err := mgin.ReadRequest(c, putKeyReq); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
+type PutKeyRequest struct {
+	Bucket string `json:"bucket" example:"my-bucket"`    // 桶名称
+	Key    string `json:"key" example:"images/logo.png"` // 文件路径
+	Data   []byte `json:"data"`                          // 文件内容
+}
 
+type PutKeyResponse struct {
+	Code    int32  `json:"code" example:"200"`                  // 响应码
+	Message string `json:"message" example:"PutKey successful"` // 响应消息
+}
+
+// PutKey 上传文件
+// @Summary 上传文件到 S3
+// @Description 上传文件内容
+// @Tags S3
+// @Accept json
+// @Produce json
+// @Param request body PutKeyRequest true "上传参数"
+// @Success 200 {object} PutKeyResponse
+// @Router /s3/PutKey [post]
+func PutKey(c *gin.Context) {
 	m := core.GetGlobalMesa()
 	if m == nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to get global mesa"})
@@ -39,28 +50,19 @@ func PutKey(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	rsp, err := s3Client.PutKey(ctx, &pb.PutKeyReq{Key: putKeyReq.Key, Data: putKeyReq.Data})
+	rsp, err := s3Client.PutKey(ctx, &pb.PutKeyReq{Key: "test-key", Data: "test-data"})
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
-	httpRsp := &protocol.S3PutKeyResp{
-		Code:    protocol.ErrorCode(rsp.GetCode()),
-		Message: rsp.GetMessage(),
-	}
-	if err := mgin.WriteResponse(c, httpRsp); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-	}
+	c.JSON(http.StatusOK, gin.H{
+		"code":    rsp.GetCode(),
+		"message": rsp.GetMessage(),
+	})
 }
 
 func GetKey(c *gin.Context) {
-	getKeyReq := &protocol.S3GetKeyReq{}
-	if err := mgin.ReadRequest(c, getKeyReq); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-
 	m := core.GetGlobalMesa()
 	if m == nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to get global mesa"})
@@ -78,29 +80,19 @@ func GetKey(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	rsp, err := s3Client.GetKey(ctx, &pb.GetKeyReq{Key: getKeyReq.Key})
+	rsp, err := s3Client.GetKey(ctx, &pb.GetKeyReq{Key: "test-key"})
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-
-	httpRsp := &protocol.S3GetKeyResp{
-		Code:    protocol.ErrorCode(rsp.GetCode()),
-		Data:    rsp.GetData(),
-		Message: rsp.GetMessage(),
-	}
-	if err := mgin.WriteResponse(c, httpRsp); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-	}
+	c.JSON(http.StatusOK, gin.H{
+		"code":    rsp.GetCode(),
+		"message": rsp.GetMessage(),
+		"data":    rsp.GetData(),
+	})
 }
 
 func DeleteKey(c *gin.Context) {
-	deleteKeyReq := &protocol.S3DeleteKeyReq{}
-	if err := mgin.ReadRequest(c, deleteKeyReq); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-
 	m := core.GetGlobalMesa()
 	if m == nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to get global mesa"})
@@ -118,17 +110,13 @@ func DeleteKey(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	rsp, err := s3Client.DeleteKey(ctx, &pb.DeleteKeyReq{Key: deleteKeyReq.Key})
+	rsp, err := s3Client.DeleteKey(ctx, &pb.DeleteKeyReq{Key: "test-key"})
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-
-	httpRsp := &protocol.S3DeleteKeyResp{
-		Code:    protocol.ErrorCode(rsp.GetCode()),
-		Message: rsp.GetMessage(),
-	}
-	if err := mgin.WriteResponse(c, httpRsp); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-	}
+	c.JSON(http.StatusOK, gin.H{
+		"code":    rsp.GetCode(),
+		"message": rsp.GetMessage(),
+	})
 }

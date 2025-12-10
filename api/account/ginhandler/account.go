@@ -9,10 +9,7 @@ import (
 	"server/core/transport"
 	"server/core/transport/micro"
 	pb "server/protobuf/gen"
-	protocol "server/submodule/protocol/gen/golang"
 	"time"
-
-	mgin "server/core/gin"
 
 	"github.com/gin-gonic/gin"
 	"go-micro.dev/v5/client"
@@ -50,12 +47,6 @@ func AccountHello(c *gin.Context) {
 }
 
 func AccountLogin(c *gin.Context) {
-	loginReq := &protocol.AccountLoginReq{}
-	if err := mgin.ReadRequest(c, loginReq); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-
 	m := core.GetGlobalMesa()
 	if m == nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to get global mesa"})
@@ -73,18 +64,14 @@ func AccountLogin(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	rsp, err := accountClient.Login(ctx, &pb.AccountLoginReq{Username: loginReq.GetUsername(), Password: loginReq.GetPassword()})
+	rsp, err := accountClient.Login(ctx, &pb.AccountLoginReq{Username: "user", Password: "password"})
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-
-	httpRsp := &protocol.AccountLoginResp{
-		Code:    protocol.ErrorCode(rsp.GetCode()),
-		Token:   rsp.GetToken(),
-		Message: rsp.GetMessage(),
-	}
-	if err := mgin.WriteResponse(c, httpRsp); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-	}
+	c.JSON(http.StatusOK, gin.H{
+		"code":    rsp.GetCode(),
+		"token":   rsp.GetToken(),
+		"message": rsp.GetMessage(),
+	})
 }

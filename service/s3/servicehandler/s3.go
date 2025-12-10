@@ -6,7 +6,6 @@ import (
 	"server/core"
 	"server/model"
 	pb "server/protobuf/gen"
-	protocol "server/submodule/protocol/gen/golang"
 )
 
 type S3 struct{}
@@ -15,7 +14,7 @@ func (a *S3) PutKey(ctx context.Context, req *pb.PutKeyReq, rsp *pb.PutKeyResp) 
 	fmt.Printf("PutKey request received: data=%s, key=%s\n", req.GetData(), req.GetKey())
 	m := core.GetGlobalMesa()
 	if m == nil {
-		rsp.Code = int32(protocol.ErrorCode_INTERNAL)
+		rsp.Code = 500
 		rsp.Message = "failed to get global mesa"
 		return nil
 	}
@@ -28,12 +27,12 @@ func (a *S3) PutKey(ctx context.Context, req *pb.PutKeyReq, rsp *pb.PutKeyResp) 
 
 	err := s3kv.Create(ctx)
 	if err != nil {
-		rsp.Code = int32(protocol.ErrorCode_INTERNAL)
+		rsp.Code = 500
 		rsp.Message = fmt.Sprintf("failed to put key: %v", err)
 		return nil
 	}
 
-	rsp.Code = int32(protocol.ErrorCode_OK)
+	rsp.Code = 200
 	rsp.Message = "PutKey successful"
 	return nil
 }
@@ -42,7 +41,7 @@ func (a *S3) GetKey(ctx context.Context, req *pb.GetKeyReq, rsp *pb.GetKeyResp) 
 	fmt.Printf("GetKey request received: key=%s\n", req.GetKey())
 	m := core.GetGlobalMesa()
 	if m == nil {
-		rsp.Code = int32(protocol.ErrorCode_INTERNAL)
+		rsp.Code = 500
 		rsp.Message = "failed to get global mesa"
 		return nil
 	}
@@ -52,12 +51,12 @@ func (a *S3) GetKey(ctx context.Context, req *pb.GetKeyReq, rsp *pb.GetKeyResp) 
 
 	s3kv, err := s3kv.FindByKey(ctx, req.GetKey())
 	if err != nil {
-		rsp.Code = int32(protocol.ErrorCode_INTERNAL)
+		rsp.Code = 500
 		rsp.Message = fmt.Sprintf("failed to get key: %v", err)
 		return nil
 	}
 
-	rsp.Code = int32(protocol.ErrorCode_OK)
+	rsp.Code = 200
 	rsp.Data = s3kv.Value
 	rsp.Message = "GetKey successful"
 	return nil
@@ -67,7 +66,7 @@ func (a *S3) DeleteKey(ctx context.Context, req *pb.DeleteKeyReq, rsp *pb.Delete
 	fmt.Printf("DeleteKey request received: key=%s\n", req.GetKey())
 	m := core.GetGlobalMesa()
 	if m == nil {
-		rsp.Code = int32(protocol.ErrorCode_INTERNAL)
+		rsp.Code = 500
 		rsp.Message = "failed to get global mesa"
 		return nil
 	}
@@ -76,12 +75,12 @@ func (a *S3) DeleteKey(ctx context.Context, req *pb.DeleteKeyReq, rsp *pb.Delete
 	s3kv.SetDB(m.DB)
 	err := s3kv.Delete(ctx, req.GetKey())
 	if err != nil {
-		rsp.Code = int32(protocol.ErrorCode_INTERNAL)
+		rsp.Code = 500
 		rsp.Message = fmt.Sprintf("failed to delete key: %v", err)
 		return nil
 	}
 
-	rsp.Code = int32(protocol.ErrorCode_OK)
+	rsp.Code = 200
 	rsp.Message = "DeleteKey successful"
 	return nil
 }

@@ -1,0 +1,54 @@
+definitions:
+  api_s3_ginhandler.PutKeyRequest:
+    properties:
+      bucket:
+        description: 桶名称
+        example: my-bucket
+        type: string
+      data:
+        description: 文件内容
+        items:
+          type: integer
+        type: array
+      key:
+        description: 文件路径
+        example: images/logo.png
+        type: string
+    type: object
+  api_s3_ginhandler.PutKeyResponse:
+    properties:
+      code:
+        description: 响应码
+        example: 200
+        type: integer
+      message:
+        description: 响应消息
+        example: PutKey successful
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /s3/PutKey:
+    post:
+      consumes:
+      - application/json
+      description: 上传文件内容
+      parameters:
+      - description: 上传参数
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/api_s3_ginhandler.PutKeyRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api_s3_ginhandler.PutKeyResponse'
+      summary: 上传文件到 S3
+      tags:
+      - S3
+swagger: "2.0"

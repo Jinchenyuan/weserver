@@ -51,6 +51,10 @@ func (s *Server) RegisterRoute(method string, path string, handler gin.HandlerFu
 	}
 }
 
+func (s *Server) GetEngine() *gin.Engine {
+	return s.Handler.(*gin.Engine)
+}
+
 func (s *Server) GetType() transport.NetType {
 	return s.opts.Type
 }

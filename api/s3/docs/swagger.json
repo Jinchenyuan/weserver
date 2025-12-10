@@ -1,0 +1,81 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "contact": {}
+    },
+    "paths": {
+        "/s3/PutKey": {
+            "post": {
+                "description": "上传文件内容",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "S3"
+                ],
+                "summary": "上传文件到 S3",
+                "parameters": [
+                    {
+                        "description": "上传参数",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/api_s3_ginhandler.PutKeyRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/api_s3_ginhandler.PutKeyResponse"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "api_s3_ginhandler.PutKeyRequest": {
+            "type": "object",
+            "properties": {
+                "bucket": {
+                    "description": "桶名称",
+                    "type": "string",
+                    "example": "my-bucket"
+                },
+                "data": {
+                    "description": "文件内容",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "key": {
+                    "description": "文件路径",
+                    "type": "string",
+                    "example": "images/logo.png"
+                }
+            }
+        },
+        "api_s3_ginhandler.PutKeyResponse": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "响应码",
+                    "type": "integer",
+                    "example": 200
+                },
+                "message": {
+                    "description": "响应消息",
+                    "type": "string",
+                    "example": "PutKey successful"
+                }
+            }
+        }
+    }
+}
