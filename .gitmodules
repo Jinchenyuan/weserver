@@ -1,4 +1,0 @@
-[submodule "submodule/protocol"]
-	path = submodule/protocol
-	url = git@192.168.1.88:2222/ChenyuanJin/weprotocol.git
-	branch = master
