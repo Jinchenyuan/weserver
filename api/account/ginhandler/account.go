@@ -17,7 +17,7 @@ import (
 	"go-micro.dev/v5/selector"
 )
 
-func AccountHello(c *gin.Context) {
+func Hello(c *gin.Context) {
 	m := core.GetGlobalMesa()
 	if m == nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to get global mesa"})
@@ -46,7 +46,7 @@ func AccountHello(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": rsp.GetMessage()})
 }
 
-func AccountLogin(c *gin.Context) {
+func Login(c *gin.Context) {
 	m := core.GetGlobalMesa()
 	if m == nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to get global mesa"})
@@ -72,6 +72,36 @@ func AccountLogin(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"code":    rsp.GetCode(),
 		"token":   rsp.GetToken(),
+		"message": rsp.GetMessage(),
+	})
+}
+
+func Register(c *gin.Context) {
+	m := core.GetGlobalMesa()
+	if m == nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to get global mesa"})
+		return
+	}
+
+	ms := m.GetServerByType(transport.MICRO_SERVER).(*micro.Service)
+	clientAny := ms.GetServiceClient(transport.Account)
+	accountClient, ok := clientAny.(pb.AccountService)
+	if !ok {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to cast to AccountClient"})
+		return
+	}
+	
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	rsp, err := accountClient.Register(ctx, &pb.AccountRegisterReq{Username: "newuser", Password: "newpassword"})
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"code":    rsp.GetCode(),
 		"message": rsp.GetMessage(),
 	})
 }

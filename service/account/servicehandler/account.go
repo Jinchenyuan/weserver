@@ -23,3 +23,12 @@ func (a *Account) Hello(ctx context.Context, req *pb.AccountHelloReq, rsp *pb.Ac
 	rsp.Message = "Hello, " + req.GetName()
 	return nil
 }
+
+func (a *Account) Register(ctx context.Context, req *pb.AccountRegisterReq, rsp *pb.AccountRegisterResp) error {
+	// Implement your registration logic here
+	fmt.Printf("Register request received: username=%s, password=%s, email=%s\n", req.GetUsername(), req.GetPassword(), req.GetEmail())
+
+	rsp.Code = 201
+	rsp.Message = "Registration successful"
+	return nil
+}

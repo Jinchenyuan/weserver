@@ -14,8 +14,9 @@ func Registry() error {
 	}
 	hs := m.GetServerByType(transport.HTTP).(*http.Server)
 
-	hs.RegisterRoute("POST", "/account/login", AccountLogin)
-	hs.RegisterRoute("GET", "/account/hello", AccountHello)
+	hs.RegisterRoute("POST", "/account/login", Login)
+	hs.RegisterRoute("GET", "/account/hello", Hello)
+	hs.RegisterRoute("POST", "/account/register", Register)
 
 	return nil
 }

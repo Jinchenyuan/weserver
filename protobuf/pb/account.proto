@@ -6,6 +6,18 @@ option go_package = "server/gen/pb;pb";
 service Account {
     rpc Hello(AccountHelloReq) returns (AccountHelloResp);
     rpc Login(AccountLoginReq) returns (AccountLoginResp);
+    rpc Register(AccountRegisterReq) returns (AccountRegisterResp);
+}
+
+message AccountRegisterReq {
+    string username = 1;
+    string password = 2;
+    string email = 3;
+}
+
+message AccountRegisterResp {
+    int32 code = 1;
+    string message = 2;
 }
 
 message AccountHelloReq {

@@ -26,3 +26,8 @@
 ### TEST
 1. 本地debug，直接启动launch.json中的配置
 2. 本地k8s集群测试，k3d/minikube
+
+### go package
+```bash
+go install github.com/micro/micro/v5/cmd/protoc-gen-micro@latest
+```
