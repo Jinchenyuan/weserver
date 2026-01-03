@@ -1,5 +1,71 @@
 definitions:
-  api_s3_ginhandler.PutKeyRequest:
+  api_account_ginhandler.HelloRequest:
+    properties:
+      name:
+        description: 名字
+        example: John
+        type: string
+    type: object
+  api_account_ginhandler.HelloResponse:
+    properties:
+      message:
+        description: 响应消息
+        example: Hello, John
+        type: string
+    type: object
+  api_account_ginhandler.LoginRequest:
+    properties:
+      password:
+        description: 密码
+        example: securepassword
+        type: string
+      username:
+        description: 用户名
+        example: john_doe
+        type: string
+    type: object
+  api_account_ginhandler.LoginResponse:
+    properties:
+      code:
+        description: 响应码
+        example: 200
+        type: integer
+      message:
+        description: 响应消息
+        example: Login successful
+        type: string
+      token:
+        description: 认证令牌
+        example: some-token
+        type: string
+    type: object
+  api_account_ginhandler.RegisterRequest:
+    properties:
+      email:
+        description: 邮箱
+        example: john@example.com
+        type: string
+      password:
+        description: 密码
+        example: securepassword
+        type: string
+      username:
+        description: 用户名
+        example: john_doe
+        type: string
+    type: object
+  api_account_ginhandler.RegisterResponse:
+    properties:
+      code:
+        description: 响应码
+        example: 201
+        type: integer
+      message:
+        description: 响应消息
+        example: Registration successful
+        type: string
+    type: object
+  ginhandler.PutKeyRequest:
     properties:
       bucket:
         description: 桶名称
@@ -15,7 +81,7 @@ definitions:
         example: images/logo.png
         type: string
     type: object
-  api_s3_ginhandler.PutKeyResponse:
+  ginhandler.PutKeyResponse:
     properties:
       code:
         description: 响应码
@@ -24,72 +90,6 @@ definitions:
       message:
         description: 响应消息
         example: PutKey successful
-        type: string
-    type: object
-  ginhandler.HelloRequest:
-    properties:
-      name:
-        description: 名字
-        example: John
-        type: string
-    type: object
-  ginhandler.HelloResponse:
-    properties:
-      message:
-        description: 响应消息
-        example: Hello, John
-        type: string
-    type: object
-  ginhandler.LoginRequest:
-    properties:
-      password:
-        description: 密码
-        example: securepassword
-        type: string
-      username:
-        description: 用户名
-        example: john_doe
-        type: string
-    type: object
-  ginhandler.LoginResponse:
-    properties:
-      code:
-        description: 响应码
-        example: 200
-        type: integer
-      message:
-        description: 响应消息
-        example: Login successful
-        type: string
-      token:
-        description: 认证令牌
-        example: some-token
-        type: string
-    type: object
-  ginhandler.RegisterRequest:
-    properties:
-      email:
-        description: 邮箱
-        example: john@example.com
-        type: string
-      password:
-        description: 密码
-        example: securepassword
-        type: string
-      username:
-        description: 用户名
-        example: john_doe
-        type: string
-    type: object
-  ginhandler.RegisterResponse:
-    properties:
-      code:
-        description: 响应码
-        example: 201
-        type: integer
-      message:
-        description: 响应消息
-        example: Registration successful
         type: string
     type: object
 info:
@@ -106,14 +106,14 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/ginhandler.HelloRequest'
+          $ref: '#/definitions/api_account_ginhandler.HelloRequest'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/ginhandler.HelloResponse'
+            $ref: '#/definitions/api_account_ginhandler.HelloResponse'
       summary: 账号服务问候接口
       tags:
       - Account
@@ -128,14 +128,14 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/ginhandler.LoginRequest'
+          $ref: '#/definitions/api_account_ginhandler.LoginRequest'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/ginhandler.LoginResponse'
+            $ref: '#/definitions/api_account_ginhandler.LoginResponse'
       summary: 账号登录接口
       tags:
       - Account
@@ -150,14 +150,14 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/ginhandler.RegisterRequest'
+          $ref: '#/definitions/api_account_ginhandler.RegisterRequest'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/ginhandler.RegisterResponse'
+            $ref: '#/definitions/api_account_ginhandler.RegisterResponse'
       summary: 账号注册接口
       tags:
       - Account
@@ -172,14 +172,14 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/api_s3_ginhandler.PutKeyRequest'
+          $ref: '#/definitions/ginhandler.PutKeyRequest'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/api_s3_ginhandler.PutKeyResponse'
+            $ref: '#/definitions/ginhandler.PutKeyResponse'
       summary: 上传文件到 S3
       tags:
       - S3

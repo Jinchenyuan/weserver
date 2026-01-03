@@ -24,7 +24,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/ginhandler.HelloRequest"
+                            "$ref": "#/definitions/api_account_ginhandler.HelloRequest"
                         }
                     }
                 ],
@@ -32,7 +32,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/ginhandler.HelloResponse"
+                            "$ref": "#/definitions/api_account_ginhandler.HelloResponse"
                         }
                     }
                 }
@@ -58,7 +58,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/ginhandler.LoginRequest"
+                            "$ref": "#/definitions/api_account_ginhandler.LoginRequest"
                         }
                     }
                 ],
@@ -66,7 +66,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/ginhandler.LoginResponse"
+                            "$ref": "#/definitions/api_account_ginhandler.LoginResponse"
                         }
                     }
                 }
@@ -92,7 +92,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/ginhandler.RegisterRequest"
+                            "$ref": "#/definitions/api_account_ginhandler.RegisterRequest"
                         }
                     }
                 ],
@@ -100,7 +100,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/ginhandler.RegisterResponse"
+                            "$ref": "#/definitions/api_account_ginhandler.RegisterResponse"
                         }
                     }
                 }
@@ -126,7 +126,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/api_s3_ginhandler.PutKeyRequest"
+                            "$ref": "#/definitions/ginhandler.PutKeyRequest"
                         }
                     }
                 ],
@@ -134,7 +134,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/api_s3_ginhandler.PutKeyResponse"
+                            "$ref": "#/definitions/ginhandler.PutKeyResponse"
                         }
                     }
                 }
@@ -142,7 +142,97 @@
         }
     },
     "definitions": {
-        "api_s3_ginhandler.PutKeyRequest": {
+        "api_account_ginhandler.HelloRequest": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "description": "名字",
+                    "type": "string",
+                    "example": "John"
+                }
+            }
+        },
+        "api_account_ginhandler.HelloResponse": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "description": "响应消息",
+                    "type": "string",
+                    "example": "Hello, John"
+                }
+            }
+        },
+        "api_account_ginhandler.LoginRequest": {
+            "type": "object",
+            "properties": {
+                "password": {
+                    "description": "密码",
+                    "type": "string",
+                    "example": "securepassword"
+                },
+                "username": {
+                    "description": "用户名",
+                    "type": "string",
+                    "example": "john_doe"
+                }
+            }
+        },
+        "api_account_ginhandler.LoginResponse": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "响应码",
+                    "type": "integer",
+                    "example": 200
+                },
+                "message": {
+                    "description": "响应消息",
+                    "type": "string",
+                    "example": "Login successful"
+                },
+                "token": {
+                    "description": "认证令牌",
+                    "type": "string",
+                    "example": "some-token"
+                }
+            }
+        },
+        "api_account_ginhandler.RegisterRequest": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "description": "邮箱",
+                    "type": "string",
+                    "example": "john@example.com"
+                },
+                "password": {
+                    "description": "密码",
+                    "type": "string",
+                    "example": "securepassword"
+                },
+                "username": {
+                    "description": "用户名",
+                    "type": "string",
+                    "example": "john_doe"
+                }
+            }
+        },
+        "api_account_ginhandler.RegisterResponse": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "响应码",
+                    "type": "integer",
+                    "example": 201
+                },
+                "message": {
+                    "description": "响应消息",
+                    "type": "string",
+                    "example": "Registration successful"
+                }
+            }
+        },
+        "ginhandler.PutKeyRequest": {
             "type": "object",
             "properties": {
                 "bucket": {
@@ -164,7 +254,7 @@
                 }
             }
         },
-        "api_s3_ginhandler.PutKeyResponse": {
+        "ginhandler.PutKeyResponse": {
             "type": "object",
             "properties": {
                 "code": {
@@ -176,96 +266,6 @@
                     "description": "响应消息",
                     "type": "string",
                     "example": "PutKey successful"
-                }
-            }
-        },
-        "ginhandler.HelloRequest": {
-            "type": "object",
-            "properties": {
-                "name": {
-                    "description": "名字",
-                    "type": "string",
-                    "example": "John"
-                }
-            }
-        },
-        "ginhandler.HelloResponse": {
-            "type": "object",
-            "properties": {
-                "message": {
-                    "description": "响应消息",
-                    "type": "string",
-                    "example": "Hello, John"
-                }
-            }
-        },
-        "ginhandler.LoginRequest": {
-            "type": "object",
-            "properties": {
-                "password": {
-                    "description": "密码",
-                    "type": "string",
-                    "example": "securepassword"
-                },
-                "username": {
-                    "description": "用户名",
-                    "type": "string",
-                    "example": "john_doe"
-                }
-            }
-        },
-        "ginhandler.LoginResponse": {
-            "type": "object",
-            "properties": {
-                "code": {
-                    "description": "响应码",
-                    "type": "integer",
-                    "example": 200
-                },
-                "message": {
-                    "description": "响应消息",
-                    "type": "string",
-                    "example": "Login successful"
-                },
-                "token": {
-                    "description": "认证令牌",
-                    "type": "string",
-                    "example": "some-token"
-                }
-            }
-        },
-        "ginhandler.RegisterRequest": {
-            "type": "object",
-            "properties": {
-                "email": {
-                    "description": "邮箱",
-                    "type": "string",
-                    "example": "john@example.com"
-                },
-                "password": {
-                    "description": "密码",
-                    "type": "string",
-                    "example": "securepassword"
-                },
-                "username": {
-                    "description": "用户名",
-                    "type": "string",
-                    "example": "john_doe"
-                }
-            }
-        },
-        "ginhandler.RegisterResponse": {
-            "type": "object",
-            "properties": {
-                "code": {
-                    "description": "响应码",
-                    "type": "integer",
-                    "example": 201
-                },
-                "message": {
-                    "description": "响应消息",
-                    "type": "string",
-                    "example": "Registration successful"
                 }
             }
         }

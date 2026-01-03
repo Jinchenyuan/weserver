@@ -17,6 +17,15 @@ import (
 	"go-micro.dev/v5/selector"
 )
 
+// Hello 账号服务问候接口
+// @Summary 账号服务问候接口
+// @Description 向账号服务发送问候请求
+// @Tags Account
+// @Accept json
+// @Produce json
+// @Param request body HelloRequest true "问候参数"
+// @Success 200 {object} HelloResponse
+// @Router /account/hello [get]
 func Hello(c *gin.Context) {
 	m := core.GetGlobalMesa()
 	if m == nil {
@@ -46,6 +55,15 @@ func Hello(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": rsp.GetMessage()})
 }
 
+// Login 账号登录接口
+// @Summary 账号登录接口
+// @Description 用户登录账号
+// @Tags Account
+// @Accept json
+// @Produce json
+// @Param request body LoginRequest true "登录参数"
+// @Success 200 {object} LoginResponse
+// @Router /account/login [post]
 func Login(c *gin.Context) {
 	m := core.GetGlobalMesa()
 	if m == nil {
@@ -76,6 +94,15 @@ func Login(c *gin.Context) {
 	})
 }
 
+// Register 账号注册接口
+// @Summary 账号注册接口
+// @Description 用户注册账号
+// @Tags Account
+// @Accept json
+// @Produce json
+// @Param request body RegisterRequest true "注册参数"
+// @Success 200 {object} RegisterResponse
+// @Router /account/register [post]
 func Register(c *gin.Context) {
 	m := core.GetGlobalMesa()
 	if m == nil {
@@ -90,7 +117,7 @@ func Register(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to cast to AccountClient"})
 		return
 	}
-	
+
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 

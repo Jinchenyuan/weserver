@@ -15,6 +15,108 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/account/hello": {
+            "get": {
+                "description": "向账号服务发送问候请求",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Account"
+                ],
+                "summary": "账号服务问候接口",
+                "parameters": [
+                    {
+                        "description": "问候参数",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/ginhandler.HelloRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ginhandler.HelloResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/account/login": {
+            "post": {
+                "description": "用户登录账号",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Account"
+                ],
+                "summary": "账号登录接口",
+                "parameters": [
+                    {
+                        "description": "登录参数",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/ginhandler.LoginRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ginhandler.LoginResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/account/register": {
+            "post": {
+                "description": "用户注册账号",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Account"
+                ],
+                "summary": "账号注册接口",
+                "parameters": [
+                    {
+                        "description": "注册参数",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/ginhandler.RegisterRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ginhandler.RegisterResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/s3/PutKey": {
             "post": {
                 "description": "上传文件内容",
@@ -85,6 +187,96 @@ const docTemplate = `{
                     "description": "响应消息",
                     "type": "string",
                     "example": "PutKey successful"
+                }
+            }
+        },
+        "ginhandler.HelloRequest": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "description": "名字",
+                    "type": "string",
+                    "example": "John"
+                }
+            }
+        },
+        "ginhandler.HelloResponse": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "description": "响应消息",
+                    "type": "string",
+                    "example": "Hello, John"
+                }
+            }
+        },
+        "ginhandler.LoginRequest": {
+            "type": "object",
+            "properties": {
+                "password": {
+                    "description": "密码",
+                    "type": "string",
+                    "example": "securepassword"
+                },
+                "username": {
+                    "description": "用户名",
+                    "type": "string",
+                    "example": "john_doe"
+                }
+            }
+        },
+        "ginhandler.LoginResponse": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "响应码",
+                    "type": "integer",
+                    "example": 200
+                },
+                "message": {
+                    "description": "响应消息",
+                    "type": "string",
+                    "example": "Login successful"
+                },
+                "token": {
+                    "description": "认证令牌",
+                    "type": "string",
+                    "example": "some-token"
+                }
+            }
+        },
+        "ginhandler.RegisterRequest": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "description": "邮箱",
+                    "type": "string",
+                    "example": "john@example.com"
+                },
+                "password": {
+                    "description": "密码",
+                    "type": "string",
+                    "example": "securepassword"
+                },
+                "username": {
+                    "description": "用户名",
+                    "type": "string",
+                    "example": "john_doe"
+                }
+            }
+        },
+        "ginhandler.RegisterResponse": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "响应码",
+                    "type": "integer",
+                    "example": 201
+                },
+                "message": {
+                    "description": "响应消息",
+                    "type": "string",
+                    "example": "Registration successful"
                 }
             }
         }

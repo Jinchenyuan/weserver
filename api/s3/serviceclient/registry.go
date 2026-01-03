@@ -23,7 +23,6 @@ func Registry(reg registry.Registry) map[string]any {
 	ret[string(transport.S3)] = make(map[string]any)
 	s3Service := micro.NewService(
 		micro.Name(string(transport.S3)),
-		// micro.Registry(reg),
 		micro.Selector(coremicro.NewSelectorDependId(reg)),
 	)
 	s3Service.Init()

@@ -23,7 +23,6 @@ func Registry(reg registry.Registry) map[string]any {
 	ret[string(transport.Account)] = make(map[string]any)
 	accountService := micro.NewService(
 		micro.Name(string(transport.Account)),
-		// micro.Registry(reg),
 		micro.Selector(coremicro.NewSelectorDependId(reg)),
 	)
 	accountService.Init()
