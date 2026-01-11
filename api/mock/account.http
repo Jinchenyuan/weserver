@@ -1,0 +1,12 @@
+@hostname= http://localhost:8083
+
+### 账号注册
+POST {{hostname}}/account/register
+Content-Type: application/json
+
+{
+    "account": "chenyuan",
+    "name": "chenyuan.jin",
+    "password": "123456",
+    "email": "jinchenyuan1991@gmail.com"
+}

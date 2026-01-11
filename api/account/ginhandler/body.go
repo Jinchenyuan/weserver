@@ -1,7 +1,8 @@
 package ginhandler
 
 type RegisterRequest struct {
-	Username string `json:"username" example:"john_doe"`       // 用户名
+	Account  string `json:"account" example:"john"`            // 用户名
+	Name     string `json:"name" example:"John Doe"`           // 姓名
 	Password string `json:"password" example:"securepassword"` // 密码
 	Email    string `json:"email" example:"john@example.com"`  // 邮箱
 }

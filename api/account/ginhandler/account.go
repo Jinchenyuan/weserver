@@ -110,6 +110,12 @@ func Register(c *gin.Context) {
 		return
 	}
 
+	var req RegisterRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid request body"})
+		return
+	}
+
 	ms := m.GetServerByType(transport.MICRO_SERVER).(*micro.Service)
 	clientAny := ms.GetServiceClient(transport.Account)
 	accountClient, ok := clientAny.(pb.AccountService)
@@ -121,7 +127,7 @@ func Register(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	rsp, err := accountClient.Register(ctx, &pb.RegisterRequest{Account: "newuser", Password: "newpassword", Email: "newuser@example.com"})
+	rsp, err := accountClient.Register(ctx, &pb.RegisterRequest{Account: req.Account, Name: req.Name, Password: req.Password, Email: req.Email})
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

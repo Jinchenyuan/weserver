@@ -83,7 +83,7 @@ func TestFindAccountByID(t *testing.T) {
 		ID: 0,
 	}
 	account.SetDB(db)
-	result, err := account.FindByID(context.Background(), 2)
+	result, err := FindAccountByID(context.Background(), db, 2)
 	if err != nil {
 		t.Errorf("failed to find account by ID: %v\n", err)
 	}
@@ -100,7 +100,7 @@ func TestFindAllAccounts(t *testing.T) {
 		Account: "testaccount",
 	}
 	account.SetDB(db)
-	result, err := account.FindAll(context.Background())
+	result, err := FindAllAccount(context.Background(), db)
 	if err != nil {
 		t.Errorf("failed to find any account: %v\n", err)
 	}

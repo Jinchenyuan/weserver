@@ -6,6 +6,7 @@ import (
 	"server/core"
 	"server/model"
 	pb "server/protobuf/gen"
+	"server/utils"
 
 	"github.com/google/uuid"
 )
@@ -46,16 +47,23 @@ func (a *Account) Register(ctx context.Context, req *pb.RegisterRequest, rsp *pb
 		return nil
 	}
 
+	hashPasswd, err := utils.HashPassword(req.GetPassword())
+	if err != nil {
+		rsp.Code = 500
+		rsp.Message = fmt.Sprintf("failed to hash password: %v", err)
+		return nil
+	}
+
 	account := &model.Account{
 		ID:       uuid.New().ID(),
 		Account:  req.GetAccount(),
-		Name:     "",
+		Name:     req.GetName(),
 		Email:    req.GetEmail(),
-		Password: req.GetPassword(),
+		Password: hashPasswd,
 	}
 	account.SetDB(m.DB)
 
-	err := account.Create(ctx)
+	err = account.Create(ctx)
 	if err != nil {
 		rsp.Code = 500
 		rsp.Message = fmt.Sprintf("failed to put key: %v", err)
