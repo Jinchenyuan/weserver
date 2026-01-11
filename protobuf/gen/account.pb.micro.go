@@ -28,9 +28,9 @@ var _ server.Option
 // Client API for Account service
 
 type AccountService interface {
-	Hello(ctx context.Context, in *AccountHelloReq, opts ...client.CallOption) (*AccountHelloResp, error)
-	Login(ctx context.Context, in *AccountLoginReq, opts ...client.CallOption) (*AccountLoginResp, error)
-	Register(ctx context.Context, in *AccountRegisterReq, opts ...client.CallOption) (*AccountRegisterResp, error)
+	Hello(ctx context.Context, in *HelloRequest, opts ...client.CallOption) (*HelloResponse, error)
+	Login(ctx context.Context, in *LoginRequest, opts ...client.CallOption) (*LoginResponse, error)
+	Register(ctx context.Context, in *RegisterRequest, opts ...client.CallOption) (*RegisterResponse, error)
 }
 
 type accountService struct {
@@ -45,9 +45,9 @@ func NewAccountService(name string, c client.Client) AccountService {
 	}
 }
 
-func (c *accountService) Hello(ctx context.Context, in *AccountHelloReq, opts ...client.CallOption) (*AccountHelloResp, error) {
+func (c *accountService) Hello(ctx context.Context, in *HelloRequest, opts ...client.CallOption) (*HelloResponse, error) {
 	req := c.c.NewRequest(c.name, "Account.Hello", in)
-	out := new(AccountHelloResp)
+	out := new(HelloResponse)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
 		return nil, err
@@ -55,9 +55,9 @@ func (c *accountService) Hello(ctx context.Context, in *AccountHelloReq, opts ..
 	return out, nil
 }
 
-func (c *accountService) Login(ctx context.Context, in *AccountLoginReq, opts ...client.CallOption) (*AccountLoginResp, error) {
+func (c *accountService) Login(ctx context.Context, in *LoginRequest, opts ...client.CallOption) (*LoginResponse, error) {
 	req := c.c.NewRequest(c.name, "Account.Login", in)
-	out := new(AccountLoginResp)
+	out := new(LoginResponse)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
 		return nil, err
@@ -65,9 +65,9 @@ func (c *accountService) Login(ctx context.Context, in *AccountLoginReq, opts ..
 	return out, nil
 }
 
-func (c *accountService) Register(ctx context.Context, in *AccountRegisterReq, opts ...client.CallOption) (*AccountRegisterResp, error) {
+func (c *accountService) Register(ctx context.Context, in *RegisterRequest, opts ...client.CallOption) (*RegisterResponse, error) {
 	req := c.c.NewRequest(c.name, "Account.Register", in)
-	out := new(AccountRegisterResp)
+	out := new(RegisterResponse)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
 		return nil, err
@@ -78,16 +78,16 @@ func (c *accountService) Register(ctx context.Context, in *AccountRegisterReq, o
 // Server API for Account service
 
 type AccountHandler interface {
-	Hello(context.Context, *AccountHelloReq, *AccountHelloResp) error
-	Login(context.Context, *AccountLoginReq, *AccountLoginResp) error
-	Register(context.Context, *AccountRegisterReq, *AccountRegisterResp) error
+	Hello(context.Context, *HelloRequest, *HelloResponse) error
+	Login(context.Context, *LoginRequest, *LoginResponse) error
+	Register(context.Context, *RegisterRequest, *RegisterResponse) error
 }
 
 func RegisterAccountHandler(s server.Server, hdlr AccountHandler, opts ...server.HandlerOption) error {
 	type account interface {
-		Hello(ctx context.Context, in *AccountHelloReq, out *AccountHelloResp) error
-		Login(ctx context.Context, in *AccountLoginReq, out *AccountLoginResp) error
-		Register(ctx context.Context, in *AccountRegisterReq, out *AccountRegisterResp) error
+		Hello(ctx context.Context, in *HelloRequest, out *HelloResponse) error
+		Login(ctx context.Context, in *LoginRequest, out *LoginResponse) error
+		Register(ctx context.Context, in *RegisterRequest, out *RegisterResponse) error
 	}
 	type Account struct {
 		account
@@ -100,14 +100,14 @@ type accountHandler struct {
 	AccountHandler
 }
 
-func (h *accountHandler) Hello(ctx context.Context, in *AccountHelloReq, out *AccountHelloResp) error {
+func (h *accountHandler) Hello(ctx context.Context, in *HelloRequest, out *HelloResponse) error {
 	return h.AccountHandler.Hello(ctx, in, out)
 }
 
-func (h *accountHandler) Login(ctx context.Context, in *AccountLoginReq, out *AccountLoginResp) error {
+func (h *accountHandler) Login(ctx context.Context, in *LoginRequest, out *LoginResponse) error {
 	return h.AccountHandler.Login(ctx, in, out)
 }
 
-func (h *accountHandler) Register(ctx context.Context, in *AccountRegisterReq, out *AccountRegisterResp) error {
+func (h *accountHandler) Register(ctx context.Context, in *RegisterRequest, out *RegisterResponse) error {
 	return h.AccountHandler.Register(ctx, in, out)
 }

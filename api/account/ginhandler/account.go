@@ -45,7 +45,7 @@ func Hello(c *gin.Context) {
 	ctx := metadata.NewContext(context.Background(), map[string]string{"uid": fmt.Sprintf("%d", uid)})
 	// For testing, use a fixed ui
 	// ctx := metadata.NewContext(context.Background(), map[string]string{"uid": "123456"})
-	rsp, err := accountClient.Hello(ctx, &pb.AccountHelloReq{Name: "this api account"}, client.WithSelectOption(func(so *selector.SelectOptions) {
+	rsp, err := accountClient.Hello(ctx, &pb.HelloRequest{Name: "this api account"}, client.WithSelectOption(func(so *selector.SelectOptions) {
 		so.Context = ctx
 	}))
 	if err != nil {
@@ -82,7 +82,7 @@ func Login(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	rsp, err := accountClient.Login(ctx, &pb.AccountLoginReq{Username: "user", Password: "password"})
+	rsp, err := accountClient.Login(ctx, &pb.LoginRequest{Username: "user", Password: "password"})
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -121,7 +121,7 @@ func Register(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	rsp, err := accountClient.Register(ctx, &pb.AccountRegisterReq{Username: "newuser", Password: "newpassword"})
+	rsp, err := accountClient.Register(ctx, &pb.RegisterRequest{Account: "newuser", Password: "newpassword", Email: "newuser@example.com"})
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

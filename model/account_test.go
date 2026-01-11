@@ -17,8 +17,11 @@ func TestAddAccount(t *testing.T) {
 	defer db.Close()
 
 	account := &Account{
-		OwnerID:   1,
-		Balance:   100.0,
+		ID:        1,
+		Account:   "testaccount",
+		Name:      "testuser",
+		Email:     "testuser@example.com",
+		Password:  "password123",
 		CreatedAt: time.Now(),
 		UpdatedAt: time.Now(),
 	}
@@ -35,8 +38,11 @@ func TestUpdateAccount(t *testing.T) {
 	defer db.Close()
 
 	account := &Account{
-		OwnerID:   1,
-		Balance:   100.0,
+		ID:        1,
+		Account:   "testaccount",
+		Name:      "testuser",
+		Email:     "testuser@example.com",
+		Password:  "password123",
 		CreatedAt: time.Now(),
 		UpdatedAt: time.Now(),
 	}
@@ -46,8 +52,8 @@ func TestUpdateAccount(t *testing.T) {
 		t.Errorf("failed to create account: %v\n", err)
 	}
 
-	account.Balance = 200.0
-	err = account.Update(context.Background(), "balance")
+	account.Email = "newemail@example.com"
+	err = account.Update(context.Background(), "email")
 	if err != nil {
 		t.Errorf("failed to update account: %v\n", err)
 	}
@@ -90,7 +96,8 @@ func TestFindAllAccounts(t *testing.T) {
 	defer db.Close()
 
 	account := &Account{
-		ID: 0,
+		ID:      0,
+		Account: "testaccount",
 	}
 	account.SetDB(db)
 	result, err := account.FindAll(context.Background())

@@ -1,40 +1,41 @@
 syntax = "proto3";
 
 package pb;
+
 option go_package = "server/gen/pb;pb";
 
 service Account {
-    rpc Hello(AccountHelloReq) returns (AccountHelloResp);
-    rpc Login(AccountLoginReq) returns (AccountLoginResp);
-    rpc Register(AccountRegisterReq) returns (AccountRegisterResp);
+  rpc Hello(HelloRequest) returns (HelloResponse);
+  rpc Login(LoginRequest) returns (LoginResponse);
+  rpc Register(RegisterRequest) returns (RegisterResponse);
 }
 
-message AccountRegisterReq {
-    string username = 1;
-    string password = 2;
-    string email = 3;
+message RegisterRequest {
+  string account = 1;
+  string password = 2;
+  string email = 3;
 }
 
-message AccountRegisterResp {
-    int32 code = 1;
-    string message = 2;
+message RegisterResponse {
+  int32 code = 1;
+  string message = 2;
 }
 
-message AccountHelloReq {
-    string name = 1;
+message HelloRequest {
+  string name = 1;
 }
 
-message AccountHelloResp {
-    string message = 1;
+message HelloResponse {
+  string message = 1;
 }
 
-message AccountLoginReq {
-    string username = 1;
-    string password = 2;
+message LoginRequest {
+  string username = 1;
+  string password = 2;
 }
 
-message AccountLoginResp {
-    int32 code = 1;
-    string token = 2;
-    string message = 3;
+message LoginResponse {
+  int32 code = 1;
+  string token = 2;
+  string message = 3;
 }

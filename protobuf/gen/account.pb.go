@@ -21,29 +21,29 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-type AccountRegisterReq struct {
+type RegisterRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Username      string                 `protobuf:"bytes,1,opt,name=username,proto3" json:"username,omitempty"`
+	Account       string                 `protobuf:"bytes,1,opt,name=account,proto3" json:"account,omitempty"`
 	Password      string                 `protobuf:"bytes,2,opt,name=password,proto3" json:"password,omitempty"`
 	Email         string                 `protobuf:"bytes,3,opt,name=email,proto3" json:"email,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *AccountRegisterReq) Reset() {
-	*x = AccountRegisterReq{}
+func (x *RegisterRequest) Reset() {
+	*x = RegisterRequest{}
 	mi := &file_account_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *AccountRegisterReq) String() string {
+func (x *RegisterRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*AccountRegisterReq) ProtoMessage() {}
+func (*RegisterRequest) ProtoMessage() {}
 
-func (x *AccountRegisterReq) ProtoReflect() protoreflect.Message {
+func (x *RegisterRequest) ProtoReflect() protoreflect.Message {
 	mi := &file_account_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -55,33 +55,33 @@ func (x *AccountRegisterReq) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use AccountRegisterReq.ProtoReflect.Descriptor instead.
-func (*AccountRegisterReq) Descriptor() ([]byte, []int) {
+// Deprecated: Use RegisterRequest.ProtoReflect.Descriptor instead.
+func (*RegisterRequest) Descriptor() ([]byte, []int) {
 	return file_account_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *AccountRegisterReq) GetUsername() string {
+func (x *RegisterRequest) GetAccount() string {
 	if x != nil {
-		return x.Username
+		return x.Account
 	}
 	return ""
 }
 
-func (x *AccountRegisterReq) GetPassword() string {
+func (x *RegisterRequest) GetPassword() string {
 	if x != nil {
 		return x.Password
 	}
 	return ""
 }
 
-func (x *AccountRegisterReq) GetEmail() string {
+func (x *RegisterRequest) GetEmail() string {
 	if x != nil {
 		return x.Email
 	}
 	return ""
 }
 
-type AccountRegisterResp struct {
+type RegisterResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Code          int32                  `protobuf:"varint,1,opt,name=code,proto3" json:"code,omitempty"`
 	Message       string                 `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
@@ -89,20 +89,20 @@ type AccountRegisterResp struct {
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *AccountRegisterResp) Reset() {
-	*x = AccountRegisterResp{}
+func (x *RegisterResponse) Reset() {
+	*x = RegisterResponse{}
 	mi := &file_account_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *AccountRegisterResp) String() string {
+func (x *RegisterResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*AccountRegisterResp) ProtoMessage() {}
+func (*RegisterResponse) ProtoMessage() {}
 
-func (x *AccountRegisterResp) ProtoReflect() protoreflect.Message {
+func (x *RegisterResponse) ProtoReflect() protoreflect.Message {
 	mi := &file_account_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -114,46 +114,46 @@ func (x *AccountRegisterResp) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use AccountRegisterResp.ProtoReflect.Descriptor instead.
-func (*AccountRegisterResp) Descriptor() ([]byte, []int) {
+// Deprecated: Use RegisterResponse.ProtoReflect.Descriptor instead.
+func (*RegisterResponse) Descriptor() ([]byte, []int) {
 	return file_account_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *AccountRegisterResp) GetCode() int32 {
+func (x *RegisterResponse) GetCode() int32 {
 	if x != nil {
 		return x.Code
 	}
 	return 0
 }
 
-func (x *AccountRegisterResp) GetMessage() string {
+func (x *RegisterResponse) GetMessage() string {
 	if x != nil {
 		return x.Message
 	}
 	return ""
 }
 
-type AccountHelloReq struct {
+type HelloRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Name          string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *AccountHelloReq) Reset() {
-	*x = AccountHelloReq{}
+func (x *HelloRequest) Reset() {
+	*x = HelloRequest{}
 	mi := &file_account_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *AccountHelloReq) String() string {
+func (x *HelloRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*AccountHelloReq) ProtoMessage() {}
+func (*HelloRequest) ProtoMessage() {}
 
-func (x *AccountHelloReq) ProtoReflect() protoreflect.Message {
+func (x *HelloRequest) ProtoReflect() protoreflect.Message {
 	mi := &file_account_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -165,39 +165,39 @@ func (x *AccountHelloReq) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use AccountHelloReq.ProtoReflect.Descriptor instead.
-func (*AccountHelloReq) Descriptor() ([]byte, []int) {
+// Deprecated: Use HelloRequest.ProtoReflect.Descriptor instead.
+func (*HelloRequest) Descriptor() ([]byte, []int) {
 	return file_account_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *AccountHelloReq) GetName() string {
+func (x *HelloRequest) GetName() string {
 	if x != nil {
 		return x.Name
 	}
 	return ""
 }
 
-type AccountHelloResp struct {
+type HelloResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Message       string                 `protobuf:"bytes,1,opt,name=message,proto3" json:"message,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *AccountHelloResp) Reset() {
-	*x = AccountHelloResp{}
+func (x *HelloResponse) Reset() {
+	*x = HelloResponse{}
 	mi := &file_account_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *AccountHelloResp) String() string {
+func (x *HelloResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*AccountHelloResp) ProtoMessage() {}
+func (*HelloResponse) ProtoMessage() {}
 
-func (x *AccountHelloResp) ProtoReflect() protoreflect.Message {
+func (x *HelloResponse) ProtoReflect() protoreflect.Message {
 	mi := &file_account_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -209,19 +209,19 @@ func (x *AccountHelloResp) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use AccountHelloResp.ProtoReflect.Descriptor instead.
-func (*AccountHelloResp) Descriptor() ([]byte, []int) {
+// Deprecated: Use HelloResponse.ProtoReflect.Descriptor instead.
+func (*HelloResponse) Descriptor() ([]byte, []int) {
 	return file_account_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *AccountHelloResp) GetMessage() string {
+func (x *HelloResponse) GetMessage() string {
 	if x != nil {
 		return x.Message
 	}
 	return ""
 }
 
-type AccountLoginReq struct {
+type LoginRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Username      string                 `protobuf:"bytes,1,opt,name=username,proto3" json:"username,omitempty"`
 	Password      string                 `protobuf:"bytes,2,opt,name=password,proto3" json:"password,omitempty"`
@@ -229,20 +229,20 @@ type AccountLoginReq struct {
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *AccountLoginReq) Reset() {
-	*x = AccountLoginReq{}
+func (x *LoginRequest) Reset() {
+	*x = LoginRequest{}
 	mi := &file_account_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *AccountLoginReq) String() string {
+func (x *LoginRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*AccountLoginReq) ProtoMessage() {}
+func (*LoginRequest) ProtoMessage() {}
 
-func (x *AccountLoginReq) ProtoReflect() protoreflect.Message {
+func (x *LoginRequest) ProtoReflect() protoreflect.Message {
 	mi := &file_account_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -254,26 +254,26 @@ func (x *AccountLoginReq) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use AccountLoginReq.ProtoReflect.Descriptor instead.
-func (*AccountLoginReq) Descriptor() ([]byte, []int) {
+// Deprecated: Use LoginRequest.ProtoReflect.Descriptor instead.
+func (*LoginRequest) Descriptor() ([]byte, []int) {
 	return file_account_proto_rawDescGZIP(), []int{4}
 }
 
-func (x *AccountLoginReq) GetUsername() string {
+func (x *LoginRequest) GetUsername() string {
 	if x != nil {
 		return x.Username
 	}
 	return ""
 }
 
-func (x *AccountLoginReq) GetPassword() string {
+func (x *LoginRequest) GetPassword() string {
 	if x != nil {
 		return x.Password
 	}
 	return ""
 }
 
-type AccountLoginResp struct {
+type LoginResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Code          int32                  `protobuf:"varint,1,opt,name=code,proto3" json:"code,omitempty"`
 	Token         string                 `protobuf:"bytes,2,opt,name=token,proto3" json:"token,omitempty"`
@@ -282,20 +282,20 @@ type AccountLoginResp struct {
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *AccountLoginResp) Reset() {
-	*x = AccountLoginResp{}
+func (x *LoginResponse) Reset() {
+	*x = LoginResponse{}
 	mi := &file_account_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *AccountLoginResp) String() string {
+func (x *LoginResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*AccountLoginResp) ProtoMessage() {}
+func (*LoginResponse) ProtoMessage() {}
 
-func (x *AccountLoginResp) ProtoReflect() protoreflect.Message {
+func (x *LoginResponse) ProtoReflect() protoreflect.Message {
 	mi := &file_account_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -307,26 +307,26 @@ func (x *AccountLoginResp) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use AccountLoginResp.ProtoReflect.Descriptor instead.
-func (*AccountLoginResp) Descriptor() ([]byte, []int) {
+// Deprecated: Use LoginResponse.ProtoReflect.Descriptor instead.
+func (*LoginResponse) Descriptor() ([]byte, []int) {
 	return file_account_proto_rawDescGZIP(), []int{5}
 }
 
-func (x *AccountLoginResp) GetCode() int32 {
+func (x *LoginResponse) GetCode() int32 {
 	if x != nil {
 		return x.Code
 	}
 	return 0
 }
 
-func (x *AccountLoginResp) GetToken() string {
+func (x *LoginResponse) GetToken() string {
 	if x != nil {
 		return x.Token
 	}
 	return ""
 }
 
-func (x *AccountLoginResp) GetMessage() string {
+func (x *LoginResponse) GetMessage() string {
 	if x != nil {
 		return x.Message
 	}
@@ -337,29 +337,29 @@ var File_account_proto protoreflect.FileDescriptor
 
 const file_account_proto_rawDesc = "" +
 	"\n" +
-	"\raccount.proto\x12\x02pb\"b\n" +
-	"\x12AccountRegisterReq\x12\x1a\n" +
-	"\busername\x18\x01 \x01(\tR\busername\x12\x1a\n" +
+	"\raccount.proto\x12\x02pb\"]\n" +
+	"\x0fRegisterRequest\x12\x18\n" +
+	"\aaccount\x18\x01 \x01(\tR\aaccount\x12\x1a\n" +
 	"\bpassword\x18\x02 \x01(\tR\bpassword\x12\x14\n" +
-	"\x05email\x18\x03 \x01(\tR\x05email\"C\n" +
-	"\x13AccountRegisterResp\x12\x12\n" +
+	"\x05email\x18\x03 \x01(\tR\x05email\"@\n" +
+	"\x10RegisterResponse\x12\x12\n" +
 	"\x04code\x18\x01 \x01(\x05R\x04code\x12\x18\n" +
-	"\amessage\x18\x02 \x01(\tR\amessage\"%\n" +
-	"\x0fAccountHelloReq\x12\x12\n" +
-	"\x04name\x18\x01 \x01(\tR\x04name\",\n" +
-	"\x10AccountHelloResp\x12\x18\n" +
-	"\amessage\x18\x01 \x01(\tR\amessage\"I\n" +
-	"\x0fAccountLoginReq\x12\x1a\n" +
+	"\amessage\x18\x02 \x01(\tR\amessage\"\"\n" +
+	"\fHelloRequest\x12\x12\n" +
+	"\x04name\x18\x01 \x01(\tR\x04name\")\n" +
+	"\rHelloResponse\x12\x18\n" +
+	"\amessage\x18\x01 \x01(\tR\amessage\"F\n" +
+	"\fLoginRequest\x12\x1a\n" +
 	"\busername\x18\x01 \x01(\tR\busername\x12\x1a\n" +
-	"\bpassword\x18\x02 \x01(\tR\bpassword\"V\n" +
-	"\x10AccountLoginResp\x12\x12\n" +
+	"\bpassword\x18\x02 \x01(\tR\bpassword\"S\n" +
+	"\rLoginResponse\x12\x12\n" +
 	"\x04code\x18\x01 \x01(\x05R\x04code\x12\x14\n" +
 	"\x05token\x18\x02 \x01(\tR\x05token\x12\x18\n" +
-	"\amessage\x18\x03 \x01(\tR\amessage2\xae\x01\n" +
-	"\aAccount\x122\n" +
-	"\x05Hello\x12\x13.pb.AccountHelloReq\x1a\x14.pb.AccountHelloResp\x122\n" +
-	"\x05Login\x12\x13.pb.AccountLoginReq\x1a\x14.pb.AccountLoginResp\x12;\n" +
-	"\bRegister\x12\x16.pb.AccountRegisterReq\x1a\x17.pb.AccountRegisterRespB\x12Z\x10server/gen/pb;pbb\x06proto3"
+	"\amessage\x18\x03 \x01(\tR\amessage2\x9c\x01\n" +
+	"\aAccount\x12,\n" +
+	"\x05Hello\x12\x10.pb.HelloRequest\x1a\x11.pb.HelloResponse\x12,\n" +
+	"\x05Login\x12\x10.pb.LoginRequest\x1a\x11.pb.LoginResponse\x125\n" +
+	"\bRegister\x12\x13.pb.RegisterRequest\x1a\x14.pb.RegisterResponseB\x12Z\x10server/gen/pb;pbb\x06proto3"
 
 var (
 	file_account_proto_rawDescOnce sync.Once
@@ -375,20 +375,20 @@ func file_account_proto_rawDescGZIP() []byte {
 
 var file_account_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
 var file_account_proto_goTypes = []any{
-	(*AccountRegisterReq)(nil),  // 0: pb.AccountRegisterReq
-	(*AccountRegisterResp)(nil), // 1: pb.AccountRegisterResp
-	(*AccountHelloReq)(nil),     // 2: pb.AccountHelloReq
-	(*AccountHelloResp)(nil),    // 3: pb.AccountHelloResp
-	(*AccountLoginReq)(nil),     // 4: pb.AccountLoginReq
-	(*AccountLoginResp)(nil),    // 5: pb.AccountLoginResp
+	(*RegisterRequest)(nil),  // 0: pb.RegisterRequest
+	(*RegisterResponse)(nil), // 1: pb.RegisterResponse
+	(*HelloRequest)(nil),     // 2: pb.HelloRequest
+	(*HelloResponse)(nil),    // 3: pb.HelloResponse
+	(*LoginRequest)(nil),     // 4: pb.LoginRequest
+	(*LoginResponse)(nil),    // 5: pb.LoginResponse
 }
 var file_account_proto_depIdxs = []int32{
-	2, // 0: pb.Account.Hello:input_type -> pb.AccountHelloReq
-	4, // 1: pb.Account.Login:input_type -> pb.AccountLoginReq
-	0, // 2: pb.Account.Register:input_type -> pb.AccountRegisterReq
-	3, // 3: pb.Account.Hello:output_type -> pb.AccountHelloResp
-	5, // 4: pb.Account.Login:output_type -> pb.AccountLoginResp
-	1, // 5: pb.Account.Register:output_type -> pb.AccountRegisterResp
+	2, // 0: pb.Account.Hello:input_type -> pb.HelloRequest
+	4, // 1: pb.Account.Login:input_type -> pb.LoginRequest
+	0, // 2: pb.Account.Register:input_type -> pb.RegisterRequest
+	3, // 3: pb.Account.Hello:output_type -> pb.HelloResponse
+	5, // 4: pb.Account.Login:output_type -> pb.LoginResponse
+	1, // 5: pb.Account.Register:output_type -> pb.RegisterResponse
 	3, // [3:6] is the sub-list for method output_type
 	0, // [0:3] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name

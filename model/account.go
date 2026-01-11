@@ -8,9 +8,11 @@ import (
 )
 
 type Account struct {
-	ID        int64     `bun:",pk,autoincrement"`
-	OwnerID   int64     `bun:",notnull"`
-	Balance   float64   `bun:",notnull"`
+	ID        uint32    `bun:",pk"`
+	Account   string    `bun:",notnull,unique"`
+	Name      string    `bun:",notnull"`
+	Email     string    `bun:",notnull,unique"`
+	Password  string    `bun:",notnull"`
 	CreatedAt time.Time `bun:",nullzero,notnull"`
 	UpdatedAt time.Time `bun:",nullzero,notnull"`
 	db        *bun.DB   `bun:"-" json:"-"`
@@ -20,8 +22,6 @@ type AccountRepository interface {
 	Create(ctx context.Context) error
 	Update(ctx context.Context, column string) error
 	Delete(ctx context.Context, id int64) error
-	FindByID(ctx context.Context, id int64) (*Account, error)
-	FindAll(ctx context.Context) ([]*Account, error)
 }
 
 func (a *Account) SetDB(db *bun.DB) {
@@ -43,20 +43,29 @@ func (a *Account) Delete(ctx context.Context, id int64) error {
 	return err
 }
 
-func (a *Account) FindByID(ctx context.Context, id int64) (*Account, error) {
+func FindAccountByID(ctx context.Context, db *bun.DB, id int64) (*Account, error) {
 	account := &Account{}
-	err := a.db.NewSelect().Model(account).Where("id = ?", id).Scan(ctx)
+	err := db.NewSelect().Model(account).Where("id = ?", id).Scan(ctx)
 	if err != nil {
 		return nil, err
 	}
 	return account, nil
 }
 
-func (a *Account) FindAll(ctx context.Context) ([]*Account, error) {
+func FindAllAccount(ctx context.Context, db *bun.DB) ([]*Account, error) {
 	var accounts []*Account
-	err := a.db.NewSelect().Model(&accounts).Scan(ctx)
+	err := db.NewSelect().Model(&accounts).Scan(ctx)
 	if err != nil {
 		return nil, err
 	}
 	return accounts, nil
+}
+
+func FindAccountByAccount(ctx context.Context, db *bun.DB, ac string) (*Account, error) {
+	account := &Account{}
+	err := db.NewSelect().Model(account).Where("account = ?", ac).Scan(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return account, nil
 }
