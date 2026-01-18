@@ -14,11 +14,36 @@ import (
 type Account struct{}
 
 func (a *Account) Login(ctx context.Context, req *pb.LoginRequest, rsp *pb.LoginResponse) error {
-	// Implement your login logic here
 	fmt.Printf("Login request received: username=%s, password=%s\n", req.GetUsername(), req.GetPassword())
+	m := core.GetGlobalMesa()
+	if m == nil {
+		rsp.Code = 500
+		rsp.Message = "failed to get global mesa"
+		return nil
+	}
+
+	account, err := model.FindAccountByAccount(ctx, m.DB, req.GetUsername())
+	if err != nil || account == nil {
+		rsp.Code = 401
+		rsp.Message = "invalid username or password"
+		return nil
+	}
+
+	if !utils.CheckPassword(account.Password, req.GetPassword()) {
+		rsp.Code = 401
+		rsp.Message = "invalid username or password"
+		return nil
+	}
+
+	token, err := utils.GenerateToken(account.ID)
+	if err != nil {
+		rsp.Code = 500
+		rsp.Message = fmt.Sprintf("failed to generate token: %v", err)
+		return nil
+	}
 
 	rsp.Code = 200
-	rsp.Token = "some-token"
+	rsp.Token = token
 	rsp.Message = "Login successful"
 	return nil
 }
@@ -30,7 +55,6 @@ func (a *Account) Hello(ctx context.Context, req *pb.HelloRequest, rsp *pb.Hello
 }
 
 func (a *Account) Register(ctx context.Context, req *pb.RegisterRequest, rsp *pb.RegisterResponse) error {
-	// Implement your registration logic here
 	fmt.Printf("Register request received: account=%s, password=%s, email=%s\n", req.GetAccount(), req.GetPassword(), req.GetEmail())
 
 	m := core.GetGlobalMesa()

@@ -70,6 +70,11 @@ func Login(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to get global mesa"})
 		return
 	}
+	var req LoginRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid request body"})
+		return
+	}
 
 	ms := m.GetServerByType(transport.MICRO_SERVER).(*micro.Service)
 	clientAny := ms.GetServiceClient(transport.Account)
@@ -82,12 +87,12 @@ func Login(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	rsp, err := accountClient.Login(ctx, &pb.LoginRequest{Username: "user", Password: "password"})
+	rsp, err := accountClient.Login(ctx, &pb.LoginRequest{Username: req.Username, Password: req.Password})
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{
+	c.JSON(int(rsp.GetCode()), gin.H{
 		"code":    rsp.GetCode(),
 		"token":   rsp.GetToken(),
 		"message": rsp.GetMessage(),
@@ -133,7 +138,7 @@ func Register(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
+	c.JSON(int(rsp.GetCode()), gin.H{
 		"code":    rsp.GetCode(),
 		"message": rsp.GetMessage(),
 	})
