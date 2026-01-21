@@ -13,14 +13,15 @@ type RegisterResponse struct {
 }
 
 type LoginRequest struct {
-	Username string `json:"username" example:"john_doe"`       // 用户名
+	Account  string `json:"account" example:"john_doe"`        // 账号
 	Password string `json:"password" example:"securepassword"` // 密码
 }
 
 type LoginResponse struct {
-	Code    int32  `json:"code" example:"200"`                 // 响应码
-	Token   string `json:"token" example:"some-token"`         // 认证令牌
-	Message string `json:"message" example:"Login successful"` // 响应消息
+	Code      int32  `json:"code" example:"200"`                 // 响应码
+	AccountId uint32 `json:"account_id" example:"123"`           // 账号ID
+	Token     string `json:"token" example:"some-token"`         // 认证令牌
+	Message   string `json:"message" example:"Login successful"` // 响应消息
 }
 
 type HelloRequest struct {

@@ -10,6 +10,12 @@ import (
 
 type Options func(o *options)
 
+type RedisConfig struct {
+	Addr     string
+	Password string
+	DB       int
+}
+
 type options struct {
 	// log level
 	// default: common.Info
@@ -22,6 +28,8 @@ type options struct {
 	EtcdConfig clientv3.Config
 
 	dsn string
+
+	RedisConfig RedisConfig
 
 	Servers []transport.Server
 
@@ -61,5 +69,11 @@ func WithServers(servers ...transport.Server) Options {
 func WithEtcdConfig(config clientv3.Config) Options {
 	return func(o *options) {
 		o.EtcdConfig = config
+	}
+}
+
+func WithRedisConfig(cfg RedisConfig) Options {
+	return func(o *options) {
+		o.RedisConfig = cfg
 	}
 }

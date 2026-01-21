@@ -15,6 +15,7 @@ import (
 	"syscall"
 	"time"
 
+	redis "github.com/redis/go-redis/v9"
 	"github.com/uptrace/bun"
 	"github.com/uptrace/bun/dialect/pgdialect"
 	"github.com/uptrace/bun/driver/pgdriver"
@@ -29,6 +30,7 @@ type Mesa struct {
 	serversCtx    context.Context
 	serversCancel context.CancelFunc
 	DB            *bun.DB
+	Redis         *redis.Client
 }
 
 func New(opts ...Options) *Mesa {
@@ -50,6 +52,14 @@ func New(opts ...Options) *Mesa {
 	db, err := newDB(o.dsn)
 	if err != nil {
 		panic(fmt.Sprintf("failed to connect to database: %v", err))
+	}
+
+	var rdb *redis.Client
+	if o.RedisConfig.Addr != "" {
+		rdb, err = newRedis(o.RedisConfig)
+		if err != nil {
+			panic(fmt.Sprintf("failed to connect to redis: %v", err))
+		}
 	}
 
 	hs := http.NewHTTPServer(
@@ -74,6 +84,7 @@ func New(opts ...Options) *Mesa {
 		retChan: make(chan int),
 		etcdCtl: etcdCtl,
 		DB:      db,
+		Redis:   rdb,
 	}
 }
 
@@ -122,9 +133,39 @@ func newDB(dsn string) (*bun.DB, error) {
 	return db, nil
 }
 
+func newRedis(cfg RedisConfig) (*redis.Client, error) {
+	rdb := redis.NewClient(&redis.Options{
+		Addr:         cfg.Addr,
+		Password:     cfg.Password,
+		DB:           cfg.DB,
+		DialTimeout:  5 * time.Second,
+		ReadTimeout:  3 * time.Second,
+		WriteTimeout: 3 * time.Second,
+		PoolSize:     50,
+		MinIdleConns: 10,
+	})
+
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	if err := rdb.Ping(ctx).Err(); err != nil {
+		_ = rdb.Close()
+		return nil, err
+	}
+
+	return rdb, nil
+}
+
 func (m *Mesa) closeDB() error {
 	if m.DB != nil {
 		return m.DB.Close()
+	}
+	return nil
+}
+
+func (m *Mesa) closeRedis() error {
+	if m.Redis != nil {
+		return m.Redis.Close()
 	}
 	return nil
 }
@@ -160,6 +201,8 @@ func (m *Mesa) waitForStop() {
 	m.etcdCtl.Close()
 
 	m.closeDB()
+
+	m.closeRedis()
 
 	m.retChan <- 1
 

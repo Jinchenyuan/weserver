@@ -11,6 +11,7 @@ type (
 		Etcd       etcdCfg
 		HTTP       httpCfg
 		PostgreSQL postgreSQLCfg
+		Redis      redisCfg
 		Service    serviceCfg
 		Services   servicesCfg
 	}
@@ -27,6 +28,12 @@ type (
 
 	postgreSQLCfg struct {
 		DSN string
+	}
+
+	redisCfg struct {
+		Addr     string
+		Password string
+		DB       int
 	}
 
 	serviceCfg struct {

@@ -213,15 +213,15 @@ const docTemplate = `{
         "ginhandler.LoginRequest": {
             "type": "object",
             "properties": {
+                "account": {
+                    "description": "账号",
+                    "type": "string",
+                    "example": "john_doe"
+                },
                 "password": {
                     "description": "密码",
                     "type": "string",
                     "example": "securepassword"
-                },
-                "username": {
-                    "description": "用户名",
-                    "type": "string",
-                    "example": "john_doe"
                 }
             }
         },
@@ -248,20 +248,25 @@ const docTemplate = `{
         "ginhandler.RegisterRequest": {
             "type": "object",
             "properties": {
+                "account": {
+                    "description": "用户名",
+                    "type": "string",
+                    "example": "john"
+                },
                 "email": {
                     "description": "邮箱",
                     "type": "string",
                     "example": "john@example.com"
                 },
+                "name": {
+                    "description": "姓名",
+                    "type": "string",
+                    "example": "John Doe"
+                },
                 "password": {
                     "description": "密码",
                     "type": "string",
                     "example": "securepassword"
-                },
-                "username": {
-                    "description": "用户名",
-                    "type": "string",
-                    "example": "john_doe"
                 }
             }
         },

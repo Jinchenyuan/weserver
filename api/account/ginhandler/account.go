@@ -87,15 +87,16 @@ func Login(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	rsp, err := accountClient.Login(ctx, &pb.LoginRequest{Username: req.Username, Password: req.Password})
+	rsp, err := accountClient.Login(ctx, &pb.LoginRequest{Account: req.Account, Password: req.Password})
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 	c.JSON(int(rsp.GetCode()), gin.H{
-		"code":    rsp.GetCode(),
-		"token":   rsp.GetToken(),
-		"message": rsp.GetMessage(),
+		"code":       rsp.GetCode(),
+		"account_id": rsp.GetAccountId(),
+		"token":      rsp.GetToken(),
+		"message":    rsp.GetMessage(),
 	})
 }
 

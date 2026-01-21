@@ -42,13 +42,13 @@ definitions:
     type: object
   ginhandler.LoginRequest:
     properties:
+      account:
+        description: 账号
+        example: john_doe
+        type: string
       password:
         description: 密码
         example: securepassword
-        type: string
-      username:
-        description: 用户名
-        example: john_doe
         type: string
     type: object
   ginhandler.LoginResponse:
@@ -68,17 +68,21 @@ definitions:
     type: object
   ginhandler.RegisterRequest:
     properties:
+      account:
+        description: 用户名
+        example: john
+        type: string
       email:
         description: 邮箱
         example: john@example.com
         type: string
+      name:
+        description: 姓名
+        example: John Doe
+        type: string
       password:
         description: 密码
         example: securepassword
-        type: string
-      username:
-        description: 用户名
-        example: john_doe
         type: string
     type: object
   ginhandler.RegisterResponse:

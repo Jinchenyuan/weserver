@@ -28,6 +28,11 @@ func main() {
 		}),
 		core.WithHttpPort(cfg.HTTP.Port),
 		core.WithDSN(cfg.PostgreSQL.DSN),
+		core.WithRedisConfig(core.RedisConfig{
+			Addr:     cfg.Redis.Addr,
+			Password: cfg.Redis.Password,
+			DB:       cfg.Redis.DB,
+		}),
 		core.WithServiceScheme(micro.ServiceScheme{
 			Name:    transport.ServiceType(cfg.Service.Name),
 			Version: cfg.Service.Version,

@@ -7,6 +7,7 @@ import (
 	"server/model"
 	pb "server/protobuf/gen"
 	"server/utils"
+	"time"
 
 	"github.com/google/uuid"
 )
@@ -14,7 +15,7 @@ import (
 type Account struct{}
 
 func (a *Account) Login(ctx context.Context, req *pb.LoginRequest, rsp *pb.LoginResponse) error {
-	fmt.Printf("Login request received: username=%s, password=%s\n", req.GetUsername(), req.GetPassword())
+	fmt.Printf("Login request received: username=%s, password=%s\n", req.GetAccount(), req.GetPassword())
 	m := core.GetGlobalMesa()
 	if m == nil {
 		rsp.Code = 500
@@ -22,7 +23,7 @@ func (a *Account) Login(ctx context.Context, req *pb.LoginRequest, rsp *pb.Login
 		return nil
 	}
 
-	account, err := model.FindAccountByAccount(ctx, m.DB, req.GetUsername())
+	account, err := model.FindAccountByAccount(ctx, m.DB, req.GetAccount())
 	if err != nil || account == nil {
 		rsp.Code = 401
 		rsp.Message = "invalid username or password"
@@ -42,8 +43,11 @@ func (a *Account) Login(ctx context.Context, req *pb.LoginRequest, rsp *pb.Login
 		return nil
 	}
 
+	m.Redis.Set(ctx, fmt.Sprintf("token:%d", account.ID), token, time.Hour*24*7)
+
 	rsp.Code = 200
 	rsp.Token = token
+	rsp.AccountId = account.ID
 	rsp.Message = "Login successful"
 	return nil
 }

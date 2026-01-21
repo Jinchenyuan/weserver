@@ -29,6 +29,11 @@ func main() {
 		}),
 		core.WithHttpPort(cfg.HTTP.Port),
 		core.WithDSN(cfg.PostgreSQL.DSN),
+		core.WithRedisConfig(core.RedisConfig{
+			Addr:     cfg.Redis.Addr,
+			Password: cfg.Redis.Password,
+			DB:       cfg.Redis.DB,
+		}),
 	)
 
 	httpServer := m.GetServerByType(transport.HTTP).(*mesaHttp.Server)

@@ -9,5 +9,10 @@ port = 8083
 [postgreSQL]
 dsn = "postgres://user:password@localhost:5432/land_contract?sslmode=disable"
 
+[redis]
+addr = "127.0.0.1:6379"
+password = ""
+db = 0
+
 [services]
 account = "account-dev"
