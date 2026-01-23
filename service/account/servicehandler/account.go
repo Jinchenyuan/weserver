@@ -15,7 +15,7 @@ import (
 type Account struct{}
 
 func (a *Account) Login(ctx context.Context, req *pb.LoginRequest, rsp *pb.LoginResponse) error {
-	fmt.Printf("Login request received: username=%s, password=%s\n", req.GetAccount(), req.GetPassword())
+	fmt.Printf("Login request received: account=%s, password=%s\n", req.GetAccount(), req.GetPassword())
 	m := core.GetGlobalMesa()
 	if m == nil {
 		rsp.Code = 500
