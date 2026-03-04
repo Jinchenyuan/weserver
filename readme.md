@@ -1,8 +1,13 @@
+### 项目简介
+这是一个基于go-micro的一站式，包含开发、部署的微服务项目，可用于轻量型App、小游戏后端;
+
+如要使用，具体的业务代码自行复用或者剥离;
+
 ### 技术栈
 #### framework
-- gateway: traefik (api, https, tsl)
-- server: gin(用于api通信) + go-micro(实现为服务、服务发现；用于服务通信)
-- admin: go-admin
+- reverse proxy: traefik
+- api: gin
+- server: go-micro
 #### driver
 - pgx PostgreSQL
 - go-redis Redis
@@ -16,12 +21,11 @@
 - docker image
 - k8s container manager
 
+### api
+- [x] api
+
 ### servers
-- [ ] admin
-- [ ] gateway
-- [ ] map
-- [ ] account
-- [x] s3
+- [x] account
 
 ### TEST
 1. 本地debug，直接启动launch.json中的配置
