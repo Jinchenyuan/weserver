@@ -17,6 +17,21 @@ import (
 	"go-micro.dev/v5/selector"
 )
 
+func getAccountClient() (pb.AccountService, error) {
+	m := core.GetGlobalMesa()
+	if m == nil {
+		return nil, fmt.Errorf("failed to get global mesa")
+	}
+
+	ms := m.GetServerByType(transport.MICRO_SERVER).(*micro.Service)
+	clientAny := ms.GetServiceClient(transport.Account)
+	accountClient, ok := clientAny.(pb.AccountService)
+	if !ok {
+		return nil, fmt.Errorf("failed to cast to AccountClient")
+	}
+	return accountClient, nil
+}
+
 // Hello 账号服务问候接口
 // @Summary 账号服务问候接口
 // @Description 向账号服务发送问候请求
@@ -27,17 +42,9 @@ import (
 // @Success 200 {object} HelloResponse
 // @Router /account/hello [get]
 func Hello(c *gin.Context) {
-	m := core.GetGlobalMesa()
-	if m == nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to get global mesa"})
-		return
-	}
-
-	ms := m.GetServerByType(transport.MICRO_SERVER).(*micro.Service)
-	clientAny := ms.GetServiceClient(transport.Account)
-	accountClient, ok := clientAny.(pb.AccountService)
-	if !ok {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to cast to AccountClient"})
+	accountClient, err := getAccountClient()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 	// 随机生成一个6位数的uid
@@ -65,28 +72,20 @@ func Hello(c *gin.Context) {
 // @Success 200 {object} LoginResponse
 // @Router /account/login [post]
 func Login(c *gin.Context) {
-	m := core.GetGlobalMesa()
-	if m == nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to get global mesa"})
-		return
-	}
-	var req LoginRequest
-	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid request body"})
-		return
-	}
-
-	ms := m.GetServerByType(transport.MICRO_SERVER).(*micro.Service)
-	clientAny := ms.GetServiceClient(transport.Account)
-	accountClient, ok := clientAny.(pb.AccountService)
-	if !ok {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to cast to AccountClient"})
+	accountClient, err := getAccountClient()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
+	var req LoginRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid request body"})
+		return
+	}
 	rsp, err := accountClient.Login(ctx, &pb.LoginRequest{Account: req.Account, Password: req.Password})
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -110,29 +109,20 @@ func Login(c *gin.Context) {
 // @Success 200 {object} RegisterResponse
 // @Router /account/register [post]
 func Register(c *gin.Context) {
-	m := core.GetGlobalMesa()
-	if m == nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to get global mesa"})
-		return
-	}
-
-	var req RegisterRequest
-	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid request body"})
-		return
-	}
-
-	ms := m.GetServerByType(transport.MICRO_SERVER).(*micro.Service)
-	clientAny := ms.GetServiceClient(transport.Account)
-	accountClient, ok := clientAny.(pb.AccountService)
-	if !ok {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to cast to AccountClient"})
+	accountClient, err := getAccountClient()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
+	var req RegisterRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid request body"})
+		return
+	}
 	rsp, err := accountClient.Register(ctx, &pb.RegisterRequest{Account: req.Account, Name: req.Name, Password: req.Password, Email: req.Email})
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
