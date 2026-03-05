@@ -2,20 +2,18 @@ package model
 
 import (
 	"context"
-	"time"
 
 	"github.com/uptrace/bun"
 )
 
 type Account struct {
-	ID        uint32    `bun:",pk"`
-	Account   string    `bun:",notnull,unique"`
-	Name      string    `bun:",notnull"`
-	Email     string    `bun:",notnull,unique"`
-	Password  string    `bun:",notnull"`
-	CreatedAt time.Time `bun:",nullzero,notnull"`
-	UpdatedAt time.Time `bun:",nullzero,notnull"`
-	db        *bun.DB   `bun:"-" json:"-"`
+	bun.BaseModel `bun:"table:accounts"`
+	ID            uint32 `bun:",pk"`
+	Account       string `bun:",notnull,unique"`
+	Name          string `bun:",notnull"`
+	Email         string `bun:",notnull,unique"`
+	Password      string `bun:",notnull"`
+	Base
 }
 
 type AccountRepository interface {

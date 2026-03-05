@@ -38,4 +38,3 @@ If you want to use it:
 go install github.com/micro/micro/v5/cmd/protoc-gen-micro@latest
 ```
 
-```

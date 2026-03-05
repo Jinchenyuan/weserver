@@ -2,32 +2,6 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "api s3",
-            "type": "go",
-            "request": "launch",
-            "mode": "debug",
-            "program": "${workspaceFolder}/api/s3/main.go",
-            "env": {
-                "GIN_MODE": "debug",
-                "ENV": "dev"
-            },
-            "showLog": false,
-            "console": "integratedTerminal"
-        },
-        {
-            "name": "service s3",
-            "type": "go",
-            "request": "launch",
-            "mode": "debug",
-            "program": "${workspaceFolder}/service/s3/main.go",
-            "env": {
-                "GIN_MODE": "debug",
-                "ENV": "dev"
-            },
-            "showLog": false,
-            "console": "integratedTerminal"
-        },
-        {
             "name": "api account",
             "type": "go",
             "request": "launch",

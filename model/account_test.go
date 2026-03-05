@@ -4,7 +4,6 @@ import (
 	"context"
 	"database/sql"
 	"testing"
-	"time"
 
 	"github.com/uptrace/bun"
 	"github.com/uptrace/bun/dialect/pgdialect"
@@ -17,15 +16,14 @@ func TestAddAccount(t *testing.T) {
 	defer db.Close()
 
 	account := &Account{
-		ID:        1,
-		Account:   "testaccount",
-		Name:      "testuser",
-		Email:     "testuser@example.com",
-		Password:  "password123",
-		CreatedAt: time.Now(),
-		UpdatedAt: time.Now(),
+		ID:       1,
+		Account:  "testaccount",
+		Name:     "testuser",
+		Email:    "testuser@example.com",
+		Password: "password123",
 	}
 	account.SetDB(db)
+
 	err := account.Create(context.Background())
 	if err != nil {
 		t.Errorf("failed to create account: %v\n", err)
@@ -38,15 +36,14 @@ func TestUpdateAccount(t *testing.T) {
 	defer db.Close()
 
 	account := &Account{
-		ID:        1,
-		Account:   "testaccount",
-		Name:      "testuser",
-		Email:     "testuser@example.com",
-		Password:  "password123",
-		CreatedAt: time.Now(),
-		UpdatedAt: time.Now(),
+		ID:       1,
+		Account:  "testaccount",
+		Name:     "testuser",
+		Email:    "testuser@example.com",
+		Password: "password123",
 	}
 	account.SetDB(db)
+
 	err := account.Create(context.Background())
 	if err != nil {
 		t.Errorf("failed to create account: %v\n", err)
