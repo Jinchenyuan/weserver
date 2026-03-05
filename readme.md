@@ -1,37 +1,41 @@
-### 项目简介
-这是一个基于go-micro的一站式，包含开发、部署的微服务项目，可用于轻量型App、小游戏后端;
+### Project Overview
+This is a one-stop microservices project based on **go-micro**, covering both development and deployment. It is suitable for lightweight mobile apps or small game backends.
 
-如要使用，api、sevice为具体的业务代码，自行复用或者剥离；其他代码为项目基础设置代码。
+If you want to use it:
+- The **api** and **service** directories contain the actual business logic code — feel free to reuse or extract them as needed.
+- All other code serves as the foundational infrastructure for the project.
 
-### 技术栈
-#### framework
-- reverse proxy: traefik
-- api: gin
-- server: go-micro
-#### driver
-- pgx PostgreSQL
-- go-redis Redis
+### Tech Stack
 
-### 中间件
-- 缓存： Redis
-- db: PostgreSQL
-- ETCD
+#### Framework
+- Reverse proxy: **Traefik**
+- API gateway / HTTP handler: **Gin**
+- Microservices framework: **go-micro**
 
-### deployment
-- docker image
-- k8s container manager
+#### Drivers
+- Database: **pgx** (PostgreSQL driver)
+- Cache: **go-redis** (Redis client)
 
-### api
-- [x] api
+#### Middleware & Components
+- Cache: **Redis**
+- Database: **PostgreSQL**
+- Service discovery & configuration: **etcd**
 
-### servers
-- [x] account
+### Deployment
+- Containerization: **Docker images**
+- Orchestration: **Kubernetes** (container management)
 
-### TEST
-1. 本地debug，直接启动launch.json中的配置
-2. 本地k8s集群测试，k3d/minikube
+### Implemented Modules
+- [x] **API**
+- [x] **account** service
 
-### go package
+### Testing
+1. **Local debugging**: Directly run the configurations in `launch.json` on your local machine using VSCode
+2. **Local Kubernetes testing**: Use **k3d** or **minikube**
+
+### Required Go Tool
 ```bash
 go install github.com/micro/micro/v5/cmd/protoc-gen-micro@latest
+```
+
 ```
