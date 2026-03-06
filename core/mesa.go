@@ -7,6 +7,7 @@ import (
 	"net"
 	"os"
 	"os/signal"
+	"server/core/logger"
 	"server/core/transport"
 	"server/core/transport/http"
 	"server/core/transport/micro"
@@ -22,6 +23,8 @@ import (
 	"go-micro.dev/v5/registry"
 	etcdReg "go-micro.dev/v5/registry/etcd"
 )
+
+var log *logger.Logger
 
 type Mesa struct {
 	opts          options
@@ -89,8 +92,9 @@ func New(opts ...Options) *Mesa {
 }
 
 func (m *Mesa) Run() error {
-	fmt.Println("start mesa!")
+	log = m.getLogger()
 
+	log.Info("start mesa!")
 	m.startServers()
 
 	go m.waitForStop()
@@ -179,14 +183,14 @@ func (m *Mesa) startServers() {
 		go func(s transport.Server) {
 			defer wg.Done()
 			if err := s.Start(m.serversCtx); err != nil {
-				fmt.Printf("server failed to start: %v\n", err)
+				log.Error("server failed to start: %v\n", err)
 				m.serversCancel() // Cancel context if any server fails
 			}
 		}(server)
 	}
 
 	wg.Wait()
-	fmt.Println("All servers have started.")
+	log.Info("All servers have started.")
 }
 
 func (m *Mesa) waitForStop() {
@@ -194,7 +198,7 @@ func (m *Mesa) waitForStop() {
 	signal.Notify(sigChan, syscall.SIGINT, syscall.SIGTERM, syscall.SIGHUP)
 
 	sig := <-sigChan
-	fmt.Printf("Received signal: %v. Shutting down servers...\n", sig)
+	log.Info("Received signal: %v. Shutting down servers...\n", sig)
 
 	m.serversCancel()
 
@@ -206,5 +210,11 @@ func (m *Mesa) waitForStop() {
 
 	m.retChan <- 1
 
-	fmt.Println("Mesa has shut down.")
+	log.Warn("Mesa has shut down.")
+}
+
+func (m *Mesa) getLogger() *logger.Logger {
+	l := logger.GetLogger(string(m.opts.profile.Name))
+	l.SetLevel(m.opts.LogLevel)
+	return l
 }

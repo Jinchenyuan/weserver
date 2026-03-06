@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"server/core"
 	"server/core/config"
+	"server/core/logger"
 	"server/core/transport"
 	"server/core/transport/micro"
 	"server/service/account/servicehandler"
@@ -28,6 +29,7 @@ func main() {
 		}),
 		core.WithHttpPort(cfg.HTTP.Port),
 		core.WithDSN(cfg.PostgreSQL.DSN),
+		core.WithLogLevel(logger.ParseLevel(cfg.Log.Level)),
 		core.WithRedisConfig(core.RedisConfig{
 			Addr:     cfg.Redis.Addr,
 			Password: cfg.Redis.Password,
@@ -37,6 +39,9 @@ func main() {
 			Name:    transport.ServiceType(cfg.Service.Name),
 			Version: cfg.Service.Version,
 			Port:    cfg.Service.Port,
+		}),
+		core.WithProfile(core.Profile{
+			Name: cfg.Profile.Name,
 		}),
 	)
 

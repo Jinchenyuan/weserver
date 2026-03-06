@@ -18,3 +18,9 @@ db = 0
 name = "account-dev"
 version = "v1"
 port = 8193
+
+[log]
+level = "debug"
+
+[profile]
+name = "account-service"

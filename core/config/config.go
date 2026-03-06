@@ -14,6 +14,16 @@ type (
 		Redis      redisCfg
 		Service    serviceCfg
 		Services   servicesCfg
+		Log        logCfg
+		Profile    profileCfg
+	}
+
+	profileCfg struct {
+		Name string
+	}
+
+	logCfg struct {
+		Level string
 	}
 
 	etcdCfg struct {

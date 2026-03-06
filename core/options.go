@@ -16,11 +16,11 @@ type RedisConfig struct {
 	DB       int
 }
 
+type Profile struct {
+	Name string
+}
+
 type options struct {
-	// log level
-	// default: common.Info
-	// others: common.Debug, common.Warn, common.Error, common.Fatal.
-	// see common.Level
 	LogLevel logger.Level
 
 	HttpPort int
@@ -34,6 +34,14 @@ type options struct {
 	Servers []transport.Server
 
 	serviceScheme micro.ServiceScheme
+
+	profile Profile
+}
+
+func WithProfile(p Profile) Options {
+	return func(o *options) {
+		o.profile = p
+	}
 }
 
 func WithServiceScheme(scheme micro.ServiceScheme) Options {

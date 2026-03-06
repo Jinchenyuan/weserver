@@ -6,6 +6,7 @@ import (
 	"server/api/account/serviceclient"
 	"server/core"
 	"server/core/config"
+	"server/core/logger"
 	"server/core/transport"
 	"server/core/transport/micro"
 	"time"
@@ -28,10 +29,14 @@ func main() {
 		}),
 		core.WithHttpPort(cfg.HTTP.Port),
 		core.WithDSN(cfg.PostgreSQL.DSN),
+		core.WithLogLevel(logger.ParseLevel(cfg.Log.Level)),
 		core.WithRedisConfig(core.RedisConfig{
 			Addr:     cfg.Redis.Addr,
 			Password: cfg.Redis.Password,
 			DB:       cfg.Redis.DB,
+		}),
+		core.WithProfile(core.Profile{
+			Name: cfg.Profile.Name,
 		}),
 	)
 	core.SetGlobalMesa(m)
