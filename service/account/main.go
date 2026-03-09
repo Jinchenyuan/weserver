@@ -27,7 +27,7 @@ func main() {
 			Username:    cfg.Etcd.User,
 			Password:    cfg.Etcd.Password,
 		}),
-		core.WithHttpPort(cfg.HTTP.Port),
+		core.WithHttpPort(cfg.Http.Port),
 		core.WithDSN(cfg.PostgreSQL.DSN),
 		core.WithLogLevel(logger.ParseLevel(cfg.Log.Level)),
 		core.WithRedisConfig(core.RedisConfig{
@@ -44,8 +44,6 @@ func main() {
 			Name: cfg.Profile.Name,
 		}),
 	)
-
-	core.SetGlobalMesa(m)
 
 	microService := m.GetServerByType(transport.MICRO_SERVER).(*micro.Service)
 	microService.RegisterHandler(servicehandler.Registry)

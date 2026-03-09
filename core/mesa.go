@@ -92,9 +92,12 @@ func New(opts ...Options) *Mesa {
 }
 
 func (m *Mesa) Run() error {
-	log = m.getLogger()
-
 	log.Info("start mesa!")
+
+	SetGlobalMesa(m)
+
+	m.initLogger()
+
 	m.startServers()
 
 	go m.waitForStop()
@@ -213,8 +216,9 @@ func (m *Mesa) waitForStop() {
 	log.Warn("Mesa has shut down.")
 }
 
-func (m *Mesa) getLogger() *logger.Logger {
+func (m *Mesa) initLogger() {
 	l := logger.GetLogger(string(m.opts.profile.Name))
 	l.SetLevel(m.opts.LogLevel)
-	return l
+
+	SetGlobalLogger(l)
 }

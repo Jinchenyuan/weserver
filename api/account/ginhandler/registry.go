@@ -8,6 +8,7 @@ import (
 
 	_ "server/api/account/docs"
 
+	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
@@ -24,6 +25,18 @@ func Registry() error {
 	hs.RegisterRoute("POST", "/account/register", Register)
 
 	hs.GetEngine().GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+
+	return nil
+}
+
+func SetAuthMiddleware(authHandler gin.HandlerFunc) error {
+	m := core.GetGlobalMesa()
+	if m == nil {
+		return fmt.Errorf("failed to get global mesa")
+	}
+
+	hs := m.GetServerByType(transport.HTTP).(*http.Server)
+	hs.SetAuthMiddleware(authHandler)
 
 	return nil
 }

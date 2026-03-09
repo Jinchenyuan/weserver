@@ -9,7 +9,7 @@ import (
 type (
 	config struct {
 		Etcd       etcdCfg
-		HTTP       httpCfg
+		Http       httpCfg
 		PostgreSQL postgreSQLCfg
 		Redis      redisCfg
 		Service    serviceCfg
@@ -33,7 +33,8 @@ type (
 	}
 
 	httpCfg struct {
-		Port int
+		Port             int
+		ExcludeAuthPaths []string
 	}
 
 	postgreSQLCfg struct {

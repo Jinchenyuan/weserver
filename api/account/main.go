@@ -1,12 +1,14 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"server/api/account/ginhandler"
 	"server/api/account/serviceclient"
 	"server/core"
 	"server/core/config"
 	"server/core/logger"
+	"server/core/middleware"
 	"server/core/transport"
 	"server/core/transport/micro"
 	"time"
@@ -27,7 +29,7 @@ func main() {
 			Username:    cfg.Etcd.User,
 			Password:    cfg.Etcd.Password,
 		}),
-		core.WithHttpPort(cfg.HTTP.Port),
+		core.WithHttpPort(cfg.Http.Port),
 		core.WithDSN(cfg.PostgreSQL.DSN),
 		core.WithLogLevel(logger.ParseLevel(cfg.Log.Level)),
 		core.WithRedisConfig(core.RedisConfig{
@@ -39,7 +41,14 @@ func main() {
 			Name: cfg.Profile.Name,
 		}),
 	)
-	core.SetGlobalMesa(m)
+
+	ginhandler.SetAuthMiddleware(middleware.AuthMiddleware("account", func(id string) string {
+		cacheToken, err := m.Redis.Get(context.Background(), fmt.Sprintf("token:%s", id)).Result()
+		if err != nil {
+			return ""
+		}
+		return cacheToken
+	}, cfg.Http.ExcludeAuthPaths...))
 
 	ginhandler.Registry()
 

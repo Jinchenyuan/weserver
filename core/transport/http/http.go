@@ -12,6 +12,7 @@ import (
 
 type Server struct {
 	*http.Server
+	auth gin.HandlerFunc
 	opts options
 }
 
@@ -35,17 +36,21 @@ func NewHTTPServer(opts ...Options) *Server {
 	return hs
 }
 
+func (s *Server) SetAuthMiddleware(auth gin.HandlerFunc) {
+	s.auth = auth
+}
+
 func (s *Server) RegisterRoute(method string, path string, handler gin.HandlerFunc) {
 	r := s.Handler.(*gin.Engine)
 	switch method {
 	case http.MethodGet:
-		r.GET(path, handler)
+		r.GET(path, s.auth, handler)
 	case http.MethodPost:
-		r.POST(path, handler)
+		r.POST(path, s.auth, handler)
 	case http.MethodPut:
-		r.PUT(path, handler)
+		r.PUT(path, s.auth, handler)
 	case http.MethodDelete:
-		r.DELETE(path, handler)
+		r.DELETE(path, s.auth, handler)
 	default:
 		log.Printf("unsupported method %s for path %s\n", method, path)
 	}
