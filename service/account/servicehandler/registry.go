@@ -8,7 +8,7 @@ import (
 )
 
 func Registry(s micro.Service) error {
-	if err := pb.RegisterAccountHandler(s.Server(), new(Account)); err != nil {
+	if err := pb.RegisterAccountHandler(s.Server(), NewAccount(nil)); err != nil {
 		log.Fatalf("register handler: %v", err)
 	}
 	return nil

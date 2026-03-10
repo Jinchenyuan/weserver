@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"server/core"
+	"server/core/logger"
 	"server/model"
 	pb "server/protobuf/gen"
 	"server/utils"
@@ -12,10 +13,28 @@ import (
 	"github.com/google/uuid"
 )
 
-type Account struct{}
+type Account struct {
+	log *logger.Logger
+}
+
+func NewAccount(log *logger.Logger) *Account {
+	return &Account{log: resolveLogger(log)}
+}
+
+func resolveLogger(log *logger.Logger) *logger.Logger {
+	if log != nil {
+		return log
+	}
+
+	if globalLog := core.GetGlobalLogger(); globalLog != nil {
+		return globalLog
+	}
+
+	return logger.GetLogger("account.service")
+}
 
 func (a *Account) Login(ctx context.Context, req *pb.LoginRequest, rsp *pb.LoginResponse) error {
-	fmt.Printf("Login request received: account=%s, password=%s\n", req.GetAccount(), req.GetPassword())
+	a.log.Info("Login request received: account=", req.GetAccount())
 	m := core.GetGlobalMesa()
 	if m == nil {
 		rsp.Code = 500
@@ -53,13 +72,13 @@ func (a *Account) Login(ctx context.Context, req *pb.LoginRequest, rsp *pb.Login
 }
 
 func (a *Account) Hello(ctx context.Context, req *pb.HelloRequest, rsp *pb.HelloResponse) error {
-	fmt.Printf("Hello request received: name=%s\n", req.GetName())
+	a.log.Info("Hello request received: name=", req.GetName())
 	rsp.Message = "Hello, " + req.GetName()
 	return nil
 }
 
 func (a *Account) Register(ctx context.Context, req *pb.RegisterRequest, rsp *pb.RegisterResponse) error {
-	fmt.Printf("Register request received: account=%s, password=%s, email=%s\n", req.GetAccount(), req.GetPassword(), req.GetEmail())
+	a.log.Info("Register request received: account=", req.GetAccount(), "email=", req.GetEmail())
 
 	m := core.GetGlobalMesa()
 	if m == nil {
