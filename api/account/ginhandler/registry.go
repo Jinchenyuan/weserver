@@ -5,16 +5,16 @@ import (
 
 	_ "server/api/account/docs"
 
-	"github.com/Jinchenyuan/wego/core"
-	"github.com/Jinchenyuan/wego/core/transport"
-	"github.com/Jinchenyuan/wego/core/transport/http"
+	"github.com/Jinchenyuan/wego"
+	"github.com/Jinchenyuan/wego/transport"
+	"github.com/Jinchenyuan/wego/transport/http"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 func Registry() error {
-	m := core.GetGlobalMesa()
+	m := wego.GetGlobalMesa()
 	if m == nil {
 		return fmt.Errorf("failed to get global mesa")
 	}
@@ -30,7 +30,7 @@ func Registry() error {
 }
 
 func SetAuthMiddleware(authHandler gin.HandlerFunc) error {
-	m := core.GetGlobalMesa()
+	m := wego.GetGlobalMesa()
 	if m == nil {
 		return fmt.Errorf("failed to get global mesa")
 	}

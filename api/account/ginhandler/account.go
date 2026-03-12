@@ -8,9 +8,9 @@ import (
 	pb "server/protobuf/gen"
 	"time"
 
-	"github.com/Jinchenyuan/wego/core"
-	"github.com/Jinchenyuan/wego/core/transport"
-	"github.com/Jinchenyuan/wego/core/transport/micro"
+	"github.com/Jinchenyuan/wego"
+	"github.com/Jinchenyuan/wego/transport"
+	"github.com/Jinchenyuan/wego/transport/micro"
 	"github.com/gin-gonic/gin"
 	"go-micro.dev/v5/client"
 	"go-micro.dev/v5/metadata"
@@ -18,7 +18,7 @@ import (
 )
 
 func getAccountClient() (pb.AccountService, error) {
-	m := core.GetGlobalMesa()
+	m := wego.GetGlobalMesa()
 	if m == nil {
 		return nil, fmt.Errorf("failed to get global mesa")
 	}

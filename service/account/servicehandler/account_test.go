@@ -3,8 +3,8 @@ package servicehandler
 import (
 	"testing"
 
-	"github.com/Jinchenyuan/wego/core"
-	"github.com/Jinchenyuan/wego/core/logger"
+	"github.com/Jinchenyuan/wego"
+	"github.com/Jinchenyuan/wego/logger"
 )
 
 func TestNewAccountUsesInjectedLogger(t *testing.T) {
@@ -18,7 +18,7 @@ func TestNewAccountUsesInjectedLogger(t *testing.T) {
 
 func TestNewAccountFallsBackToGlobalLogger(t *testing.T) {
 	global := logger.NewLogger("global-test")
-	core.SetGlobalLogger(global)
+	wego.SetGlobalLogger(global)
 
 	handler := NewAccount(nil)
 	if handler.log != global {
@@ -27,7 +27,7 @@ func TestNewAccountFallsBackToGlobalLogger(t *testing.T) {
 }
 
 func TestResolveLoggerFallsBackToPackageLogger(t *testing.T) {
-	core.SetGlobalLogger(nil)
+	wego.SetGlobalLogger(nil)
 
 	resolved := resolveLogger(nil)
 	if resolved == nil {

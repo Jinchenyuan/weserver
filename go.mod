@@ -3,7 +3,7 @@ module server
 go 1.25.0
 
 require (
-	github.com/Jinchenyuan/wego v0.0.0-20260312030139-d1234e350c68
+	github.com/Jinchenyuan/wego v0.0.0-20260312085028-7313da422031
 	github.com/gin-gonic/gin v1.12.0
 	github.com/golang-jwt/jwt/v5 v5.3.0
 	github.com/google/uuid v1.6.0

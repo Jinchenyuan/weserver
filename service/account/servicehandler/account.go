@@ -8,8 +8,8 @@ import (
 	"server/utils"
 	"time"
 
-	"github.com/Jinchenyuan/wego/core"
-	"github.com/Jinchenyuan/wego/core/logger"
+	"github.com/Jinchenyuan/wego"
+	"github.com/Jinchenyuan/wego/logger"
 	"github.com/google/uuid"
 )
 
@@ -26,7 +26,7 @@ func resolveLogger(log *logger.Logger) *logger.Logger {
 		return log
 	}
 
-	if globalLog := core.GetGlobalLogger(); globalLog != nil {
+	if globalLog := wego.GetGlobalLogger(); globalLog != nil {
 		return globalLog
 	}
 
@@ -35,7 +35,7 @@ func resolveLogger(log *logger.Logger) *logger.Logger {
 
 func (a *Account) Login(ctx context.Context, req *pb.LoginRequest, rsp *pb.LoginResponse) error {
 	a.log.Info("Login request received: account=", req.GetAccount())
-	m := core.GetGlobalMesa()
+	m := wego.GetGlobalMesa()
 	if m == nil {
 		rsp.Code = 500
 		rsp.Message = "failed to get global mesa"
@@ -80,7 +80,7 @@ func (a *Account) Hello(ctx context.Context, req *pb.HelloRequest, rsp *pb.Hello
 func (a *Account) Register(ctx context.Context, req *pb.RegisterRequest, rsp *pb.RegisterResponse) error {
 	a.log.Info("Register request received: account=", req.GetAccount(), "email=", req.GetEmail())
 
-	m := core.GetGlobalMesa()
+	m := wego.GetGlobalMesa()
 	if m == nil {
 		rsp.Code = 500
 		rsp.Message = "failed to get global mesa"
