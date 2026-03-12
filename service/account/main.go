@@ -2,14 +2,14 @@ package main
 
 import (
 	"fmt"
-	"server/core"
-	"server/core/config"
-	"server/core/logger"
-	"server/core/transport"
-	"server/core/transport/micro"
 	"server/service/account/servicehandler"
 	"time"
 
+	"github.com/Jinchenyuan/wego/core"
+	"github.com/Jinchenyuan/wego/core/config"
+	"github.com/Jinchenyuan/wego/core/logger"
+	"github.com/Jinchenyuan/wego/core/transport"
+	"github.com/Jinchenyuan/wego/core/transport/micro"
 	clientv3 "go.etcd.io/etcd/client/v3"
 )
 

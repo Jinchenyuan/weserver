@@ -3,13 +3,13 @@ package servicehandler
 import (
 	"context"
 	"fmt"
-	"server/core"
-	"server/core/logger"
 	"server/model"
 	pb "server/protobuf/gen"
 	"server/utils"
 	"time"
 
+	"github.com/Jinchenyuan/wego/core"
+	"github.com/Jinchenyuan/wego/core/logger"
 	"github.com/google/uuid"
 )
 

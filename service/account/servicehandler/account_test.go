@@ -1,9 +1,10 @@
 package servicehandler
 
 import (
-	"server/core"
-	"server/core/logger"
 	"testing"
+
+	"github.com/Jinchenyuan/wego/core"
+	"github.com/Jinchenyuan/wego/core/logger"
 )
 
 func TestNewAccountUsesInjectedLogger(t *testing.T) {

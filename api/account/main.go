@@ -5,14 +5,14 @@ import (
 	"fmt"
 	"server/api/account/ginhandler"
 	"server/api/account/serviceclient"
-	"server/core"
-	"server/core/config"
-	"server/core/logger"
-	"server/core/middleware"
-	"server/core/transport"
-	"server/core/transport/micro"
 	"time"
 
+	"github.com/Jinchenyuan/wego/core"
+	"github.com/Jinchenyuan/wego/core/config"
+	"github.com/Jinchenyuan/wego/core/logger"
+	"github.com/Jinchenyuan/wego/core/middleware"
+	"github.com/Jinchenyuan/wego/core/transport"
+	"github.com/Jinchenyuan/wego/core/transport/micro"
 	clientv3 "go.etcd.io/etcd/client/v3"
 )
 

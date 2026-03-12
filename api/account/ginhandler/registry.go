@@ -2,12 +2,12 @@ package ginhandler
 
 import (
 	"fmt"
-	"server/core"
-	"server/core/transport"
-	"server/core/transport/http"
 
 	_ "server/api/account/docs"
 
+	"github.com/Jinchenyuan/wego/core"
+	"github.com/Jinchenyuan/wego/core/transport"
+	"github.com/Jinchenyuan/wego/core/transport/http"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"

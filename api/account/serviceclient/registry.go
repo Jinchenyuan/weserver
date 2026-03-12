@@ -2,12 +2,12 @@ package serviceclient
 
 import (
 	"fmt"
-	"server/core/config"
-	"server/core/transport"
 	pb "server/protobuf/gen"
 
-	coremicro "server/core/transport/micro"
+	coremicro "github.com/Jinchenyuan/wego/core/transport/micro"
 
+	"github.com/Jinchenyuan/wego/core/config"
+	"github.com/Jinchenyuan/wego/core/transport"
 	"go-micro.dev/v5"
 	"go-micro.dev/v5/registry"
 )
