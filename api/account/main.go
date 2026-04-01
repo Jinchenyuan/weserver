@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"server/api/account/ginhandler"
 	"server/api/account/serviceclient"
+	"server/config"
 	"time"
 
 	"github.com/Jinchenyuan/wego"
-	"github.com/Jinchenyuan/wego/config"
 	"github.com/Jinchenyuan/wego/logger"
 	"github.com/Jinchenyuan/wego/middleware"
 	"github.com/Jinchenyuan/wego/transport"

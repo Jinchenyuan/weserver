@@ -2,12 +2,11 @@ package serviceclient
 
 import (
 	"fmt"
+	"server/config"
 	pb "server/protobuf/gen"
 
 	coremicro "github.com/Jinchenyuan/wego/transport/micro"
 
-	"github.com/Jinchenyuan/wego/config"
-	"github.com/Jinchenyuan/wego/transport"
 	"go-micro.dev/v5"
 	"go-micro.dev/v5/registry"
 )
@@ -20,13 +19,13 @@ func Registry(reg registry.Registry) map[string]any {
 	ret := make(map[string]any)
 
 	// account
-	ret[string(transport.Account)] = make(map[string]any)
+	ret["account"] = make(map[string]any)
 	accountService := micro.NewService(
-		micro.Name(string(transport.Account)),
+		micro.Name("account.client"),
 		micro.Selector(coremicro.NewSelectorDependId(reg)),
 	)
 	accountService.Init()
-	ret[string(transport.Account)] = pb.NewAccountService(cfg.Services.Account, accountService.Client())
+	ret["account"] = pb.NewAccountService(cfg.Services.Account, accountService.Client())
 
 	return ret
 }

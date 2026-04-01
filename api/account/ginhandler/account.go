@@ -24,7 +24,7 @@ func getAccountClient() (pb.AccountService, error) {
 	}
 
 	ms := m.GetServerByType(transport.MICRO_SERVER).(*micro.Service)
-	clientAny := ms.GetServiceClient(transport.Account)
+	clientAny := ms.GetServiceClient("account")
 	accountClient, ok := clientAny.(pb.AccountService)
 	if !ok {
 		return nil, fmt.Errorf("failed to cast to AccountClient")
