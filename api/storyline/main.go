@@ -2,9 +2,9 @@ package main
 
 import (
 	"fmt"
-	"server/api/account/ginhandler"
-	"server/api/account/serviceclient"
 	commonmiddleware "server/api/middleware"
+	storylinegin "server/api/storyline/ginhandler"
+	storylineclient "server/api/storyline/serviceclient"
 	"server/config"
 	"time"
 
@@ -21,6 +21,7 @@ func main() {
 		fmt.Printf("failed to read config: %v\n", err)
 		return
 	}
+
 	m := wego.New(
 		wego.WithEtcdConfig(clientv3.Config{
 			Endpoints:   cfg.Etcd.Endpoints,
@@ -41,12 +42,14 @@ func main() {
 		}),
 	)
 
-	ginhandler.SetAuthMiddleware(commonmiddleware.AuthMiddleware(cfg.Http.ExcludeAuthPaths...))
+	storylinegin.SetAuthMiddleware(commonmiddleware.AuthMiddleware(cfg.Http.ExcludeAuthPaths...))
 
-	ginhandler.Registry()
+	if err := storylinegin.Registry(); err != nil {
+		fmt.Printf("failed to register storyline routes: %v\n", err)
+		return
+	}
 
-	ms := m.GetServerByType(transport.MICRO_SERVER).(*micro.Service)
-	ms.NewServiceClients(serviceclient.Registry)
+	m.GetServerByType(transport.MICRO_SERVER).(*micro.Service).NewServiceClients(storylineclient.Registry)
 
 	if err := m.Run(); err != nil {
 		fmt.Printf("failed to run mesa: %v\n", err)

@@ -26,6 +26,32 @@
             },
             "showLog": false,
             "console": "integratedTerminal"
+        },
+        {
+            "name": "api storyline",
+            "type": "go",
+            "request": "launch",
+            "mode": "debug",
+            "program": "${workspaceFolder}/api/storyline/main.go",
+            "env": {
+                "GIN_MODE": "debug",
+                "ENV": "dev"
+            },
+            "showLog": false,
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "service storyline",
+            "type": "go",
+            "request": "launch",
+            "mode": "debug",
+            "program": "${workspaceFolder}/service/storyline/main.go",
+            "env": {
+                "GIN_MODE": "debug",
+                "ENV": "dev"
+            },
+            "showLog": false,
+            "console": "integratedTerminal"
         }
     ]
 }

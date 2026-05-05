@@ -54,8 +54,8 @@ type (
 	}
 
 	servicesCfg struct {
-		Account string
-		S3      string
+		Account   string
+		Storyline string
 	}
 )
 

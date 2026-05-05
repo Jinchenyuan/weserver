@@ -2,10 +2,8 @@ package main
 
 import (
 	"fmt"
-	"server/api/account/ginhandler"
-	"server/api/account/serviceclient"
-	commonmiddleware "server/api/middleware"
 	"server/config"
+	"server/service/storyline/servicehandler"
 	"time"
 
 	"github.com/Jinchenyuan/wego"
@@ -21,6 +19,7 @@ func main() {
 		fmt.Printf("failed to read config: %v\n", err)
 		return
 	}
+
 	m := wego.New(
 		wego.WithEtcdConfig(clientv3.Config{
 			Endpoints:   cfg.Etcd.Endpoints,
@@ -36,17 +35,18 @@ func main() {
 			Password: cfg.Redis.Password,
 			DB:       cfg.Redis.DB,
 		}),
+		wego.WithServiceScheme(micro.ServiceScheme{
+			Name:    cfg.Service.Name,
+			Version: cfg.Service.Version,
+			Port:    cfg.Service.Port,
+		}),
 		wego.WithProfile(wego.Profile{
 			Name: cfg.Profile.Name,
 		}),
 	)
 
-	ginhandler.SetAuthMiddleware(commonmiddleware.AuthMiddleware(cfg.Http.ExcludeAuthPaths...))
-
-	ginhandler.Registry()
-
-	ms := m.GetServerByType(transport.MICRO_SERVER).(*micro.Service)
-	ms.NewServiceClients(serviceclient.Registry)
+	microService := m.GetServerByType(transport.MICRO_SERVER).(*micro.Service)
+	microService.RegisterHandler(servicehandler.Registry)
 
 	if err := m.Run(); err != nil {
 		fmt.Printf("failed to run mesa: %v\n", err)

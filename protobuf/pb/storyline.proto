@@ -1,0 +1,90 @@
+syntax = "proto3";
+
+package pb;
+
+option go_package = "server/gen/pb;pb";
+
+service Storyline {
+  rpc ListStorylines(ListStorylinesRequest) returns (ListStorylinesResponse);
+  rpc GetStoryline(GetStorylineRequest) returns (StorylineDetail);
+  rpc CreateStoryline(CreateStorylineRequest) returns (StorylineMutationResponse);
+  rpc UpdateStoryline(UpdateStorylineRequest) returns (StorylineMutationResponse);
+}
+
+message StorylineNode {
+  string id = 1;
+  string title = 2;
+  string date = 3;
+  string note = 4;
+  string location = 5;
+  string photo_uri = 6;
+  int32 sort_order = 7;
+}
+
+message StorylineDetail {
+  string id = 1;
+  string title = 2;
+  string description = 3;
+  string cover_photo_uri = 4;
+  string created_at = 5;
+  string updated_at = 6;
+  repeated StorylineNode nodes = 7;
+}
+
+message StorylineSummary {
+  string id = 1;
+  string title = 2;
+  string description = 3;
+  string cover_photo_uri = 4;
+  int32 node_count = 5;
+  string latest_node_title = 6;
+  string latest_node_date = 7;
+  string updated_at = 8;
+}
+
+message StorylineNodeInput {
+  string id = 1;
+  string title = 2;
+  string date = 3;
+  string note = 4;
+  string location = 5;
+  string photo_uri = 6;
+  int32 sort_order = 7;
+}
+
+message ListStorylinesRequest {
+  uint32 account_id = 1;
+}
+
+message ListStorylinesResponse {
+  repeated StorylineSummary storylines = 1;
+}
+
+message GetStorylineRequest {
+  uint32 account_id = 1;
+  string id = 2;
+}
+
+message CreateStorylineRequest {
+  uint32 account_id = 1;
+  string title = 2;
+  string description = 3;
+  string cover_photo_uri = 4;
+  repeated StorylineNodeInput nodes = 5;
+}
+
+message UpdateStorylineRequest {
+  uint32 account_id = 1;
+  string id = 2;
+  string title = 3;
+  string description = 4;
+  string cover_photo_uri = 5;
+  repeated StorylineNodeInput nodes = 6;
+}
+
+message StorylineMutationResponse {
+  bool success = 1;
+  StorylineDetail storyline = 2;
+  string message = 3;
+  int32 code = 4;
+}
