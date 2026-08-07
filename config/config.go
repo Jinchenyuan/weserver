@@ -54,8 +54,9 @@ type (
 	}
 
 	servicesCfg struct {
-		Account   string
-		Storyline string
+		Account     string
+		Storyline   string
+		EventRecord string
 	}
 )
 

@@ -8,10 +8,16 @@ echo "Starting Account API..."
 echo "Starting Storyline API..."
 (cd api/storyline && go run main.go) &
 
+echo "Starting EventRecord API..."
+(cd api/eventrecord && go run main.go) &
+
 echo "Starting Account Service..."
 (cd service/account && go run main.go) &
 
 echo "Starting Storyline Service..."
 (cd service/storyline && go run main.go) &
+
+echo "Starting EventRecord Service..."
+(cd service/eventrecord && go run main.go) &
 
 wait

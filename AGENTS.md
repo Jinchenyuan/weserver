@@ -1,19 +1,22 @@
 # AGENTS.md
 
-This repository is the backend service project for `we`. It currently centers on two implemented business areas, `account` and `storyline`, and is built around the `wego` runtime plus a small set of clear layers.
+This repository is the backend service project for `we`. It currently centers on three implemented business areas, `account`, `storyline`, and `eventrecord`, and is built around the `wego` runtime plus a small set of clear layers.
 
 ## Project Overview
 
 - Entry points:
-  - `api/storyline/main.go`: unified HTTP API process for `account` + `storyline`
+  - `api/account/main.go`: account HTTP API process
+  - `api/storyline/main.go`: storyline HTTP API process
+  - `api/eventrecord/main.go`: eventrecord HTTP API process
   - `service/account/main.go`: microservice process
   - `service/storyline/main.go`: microservice process
+  - `service/eventrecord/main.go`: microservice process
 - Main request path:
   - Gin HTTP route -> API handler -> go-micro client -> service handler -> model -> PostgreSQL
 - Shared runtime:
   - `wego` creates and owns the HTTP server, microservice server, PostgreSQL connection, Redis client, etcd registry, and global logger
 - Current business scope:
-  - Implemented and usable: `account`, `storyline`
+  - Implemented and usable: `account`, `storyline`, `eventrecord`
   - Repository still contains some legacy or placeholder `s3` references in Swagger, scripts, and deploy files
 
 ## Main Areas
@@ -28,7 +31,7 @@ This repository is the backend service project for `we`. It currently centers on
   - Persistence layer built on `bun`
   - Defines tables and basic CRUD/query helpers
 - `protobuf`
-  - `account.proto`, `storyline.proto`, plus generated Go/micro stubs
+  - `account.proto`, `storyline.proto`, `eventrecord.proto`, plus generated Go/micro stubs
   - API and service communicate through these contracts
 - `config`
   - Shared TOML config loader
@@ -49,11 +52,11 @@ This repository is the backend service project for `we`. It currently centers on
   - HTTP server
   - go-micro server
   - global Mesa runtime
-- The unified API process:
-  - runs from `api/storyline/main.go`
-  - configures JWT-based auth middleware for both `account` and `storyline`
-  - registers Gin routes from both `api/account/ginhandler` and `api/storyline/ginhandler`
-  - creates service clients from both `api/account/serviceclient` and `api/storyline/serviceclient`
+- The API processes:
+  - currently run as separate local processes for `account`, `storyline`, and `eventrecord`
+  - each process configures the shared JWT auth middleware from `api/middleware/auth.go`
+  - each process registers only its own Gin routes and service clients
+  - local ports are currently split by business capability rather than served behind a single gateway
 - The service process:
   - configures the microservice identity from `[service]`
   - registers RPC handlers in `service/account/servicehandler/registry.go` or `service/storyline/servicehandler/registry.go`
@@ -75,7 +78,7 @@ This repository is the backend service project for `we`. It currently centers on
   - login validates the bcrypt password hash
   - service generates JWT via `utils.GenerateToken`
   - token is cached in Redis as `token:<accountID>`
-  - API middleware checks `Authorization: Bearer <token>` plus request header `account`
+  - API middleware checks `Authorization: Bearer <token>` and validates it against Redis
 - Important caveat:
   - `utils.GenerateToken` sets JWT expiry to 24 hours, but login writes the Redis token with a 7 day TTL. Actual validity is therefore bounded by the JWT expiry unless token parsing behavior is changed elsewhere.
 
@@ -106,6 +109,38 @@ This repository is the backend service project for `we`. It currently centers on
   - list sorting follows latest node date first, then `updatedAt`
   - `coverPhotoUri` and `photoUri` are stored as raw strings, including data URIs
 
+## EventRecord Module
+
+- HTTP routes:
+  - `GET /event-records`
+  - `GET /event-records/:id`
+  - `POST /event-records`
+  - `PUT /event-records/:id`
+  - `POST /event-records/:id/notes`
+  - `PUT /event-records/:eventId/notes/:noteId`
+  - `DELETE /event-records/:eventId/notes/:noteId`
+- RPC contract:
+  - `protobuf/pb/eventrecord.proto`
+  - methods: `ListEventRecords`, `GetEventRecord`, `CreateEventRecord`, `UpdateEventRecord`, `CreateEventNote`, `UpdateEventNote`, `DeleteEventNote`
+- Persistence:
+  - `model/eventrecord.go`
+  - table DDL: `service/schemes/postgre/event_records.sql`
+- Data model:
+  - one `event_records` row per event
+  - many `event_notes` rows per event
+  - event id and note id are stored as UUID strings to match frontend `String` ids
+- Auth and ownership:
+  - requests authenticate by Bearer JWT only
+  - API middleware parses `account_id` from JWT and validates the token against Redis
+  - all event and note reads and writes are filtered by `account_id`
+- Behavior contract:
+  - API JSON shape must match `we_client/lib/features/event_record/models/event_record_models.dart`
+  - `coverPhotoUri` is required and stored as a raw string
+  - note `photoUri` is stored as a raw nullable string, including data URIs
+  - detail `notes` are returned in `createdAt` descending order
+  - list sorting follows `latestNoteDate ?? updatedAt` descending, then `occurredAt` descending
+  - backend time parsing accepts both RFC3339 timestamps and Dart `toIso8601String()` values without timezone suffix
+
 ## Config Files
 
 - API template: `api/config.toml.template`
@@ -119,6 +154,7 @@ This repository is the backend service project for `we`. It currently centers on
   - `[service]`: microservice name/version/port for service registration
   - `[services].account`: target service name used by the API client
   - `[services].storyline`: target service name used by the API client
+  - `[services].eventrecord`: target service name used by the eventrecord API client
   - `[profile].name`: runtime profile / logger identity
 
 ## Local Run Notes
@@ -126,17 +162,24 @@ This repository is the backend service project for `we`. It currently centers on
 - Simple local start from the repo root:
   - `./run.sh`
 - That script starts:
-  - unified `api/storyline` gateway
+  - `api/account`
+  - `api/storyline`
+  - `api/eventrecord`
   - `service/account`
   - `service/storyline`
+  - `service/eventrecord`
 - Each process expects a local `config.toml` in its own directory, so copy from:
+  - `api/account/config.toml.template` -> `api/account/config.toml`
   - `api/storyline/config.toml.template` -> `api/storyline/config.toml`
-  - `service/config.toml.template` -> `service/account/config.toml`
+  - `api/eventrecord/config.toml.template` -> `api/eventrecord/config.toml`
+  - `service/account/config.toml.template` -> `service/account/config.toml`
   - `service/storyline/config.toml.template` -> `service/storyline/config.toml`
+  - `service/eventrecord/config.toml.template` -> `service/eventrecord/config.toml`
 - Database schema setup:
   - run `service/schemes/postgre/aa_init.sql`
   - then run `service/schemes/postgre/accounts.sql`
   - then run `service/schemes/postgre/storylines.sql`
+  - then run `service/schemes/postgre/event_records.sql`
 
 ## Change Guidance
 
@@ -163,17 +206,21 @@ This repository is the backend service project for `we`. It currently centers on
 - Current meaningful automated tests are limited:
   - `service/account/servicehandler/account_test.go` checks logger fallback behavior
   - `service/storyline/servicehandler/storyline_test.go` checks logger fallback and basic validation
+  - `service/eventrecord/servicehandler/eventrecord_test.go` checks logger fallback and basic validation
   - `api/storyline/ginhandler/storyline_test.go` checks request validation
+  - `api/eventrecord/ginhandler/eventrecord_test.go` checks request validation
 - `model/account_test.go` is integration-style and depends on a real PostgreSQL instance with hard-coded DSNs; treat it as manual or environment-specific unless it is rewritten
+- `model` package tests are integration-style and may require a reachable PostgreSQL instance
 - When changing login/register behavior, add tests close to the service handler first
 - When changing storyline request/response shape, validate against the frontend Dart models before changing backend field names
+- When changing eventrecord request/response shape, validate against the frontend Dart models before changing backend field names
 
 ## Working Notes
 
 - `wego` is not just a helper library; it is the backend runtime foundation for server startup, transport wiring, registry, DB/Redis lifecycle, and shared middleware behavior
 - The repo currently looks like an evolving template plus one implemented business module; inspect for stale references before assuming a feature is live
 - Safe default for new work:
-  - trace the request through `api/storyline/main.go` -> feature `ginhandler` -> feature `serviceclient` -> feature `service/.../main.go` -> `servicehandler` -> `model`
+  - trace the request through `api/<module>/main.go` -> feature `ginhandler` -> feature `serviceclient` -> `service/<module>/main.go` -> `servicehandler` -> `model`
 - Be careful with service naming:
   - the API client resolves the downstream service by `cfg.Services.Account`
   - the service registers itself by `cfg.Service.Name`

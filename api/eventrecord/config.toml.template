@@ -1,0 +1,25 @@
+[etcd]
+endpoints = ["http://localhost:2379"]
+user = "root"
+password = "123456"
+
+[http]
+port = 8085
+excludeAuthPaths = []
+
+[postgreSQL]
+dsn = "postgres://user:password@localhost:5432/we?sslmode=disable"
+
+[redis]
+addr = "localhost:6379"
+password = "123456"
+db = 0
+
+[services]
+eventrecord = "eventrecord-dev"
+
+[log]
+level = "debug"
+
+[profile]
+name = "eventrecord-api"

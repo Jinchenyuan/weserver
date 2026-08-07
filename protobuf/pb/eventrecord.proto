@@ -1,0 +1,116 @@
+syntax = "proto3";
+
+package pb;
+
+option go_package = "server/gen/pb;pb";
+
+service EventRecord {
+  rpc ListEventRecords(ListEventRecordsRequest) returns (ListEventRecordsResponse);
+  rpc GetEventRecord(GetEventRecordRequest) returns (EventRecordDetail);
+  rpc CreateEventRecord(CreateEventRecordRequest) returns (EventRecordMutationResponse);
+  rpc UpdateEventRecord(UpdateEventRecordRequest) returns (EventRecordMutationResponse);
+  rpc CreateEventNote(CreateEventNoteRpcRequest) returns (EventRecordMutationResponse);
+  rpc UpdateEventNote(UpdateEventNoteRpcRequest) returns (EventRecordMutationResponse);
+  rpc DeleteEventNote(DeleteEventNoteRequest) returns (EventRecordMutationResponse);
+}
+
+message EventNote {
+  string id = 1;
+  string created_at = 2;
+  string title = 3;
+  string content = 4;
+  string photo_uri = 5;
+}
+
+message EventRecordDetail {
+  string id = 1;
+  string title = 2;
+  string occurred_at = 3;
+  string location = 4;
+  string description = 5;
+  string cover_photo_uri = 6;
+  string created_at = 7;
+  string updated_at = 8;
+  repeated EventNote notes = 9;
+}
+
+message EventRecordSummary {
+  string id = 1;
+  string title = 2;
+  string location = 3;
+  string occurred_at = 4;
+  string cover_photo_uri = 5;
+  string latest_note_date = 6;
+  int32 note_count = 7;
+  string updated_at = 8;
+}
+
+message ListEventRecordsRequest {
+  uint32 account_id = 1;
+}
+
+message ListEventRecordsResponse {
+  repeated EventRecordSummary events = 1;
+}
+
+message GetEventRecordRequest {
+  uint32 account_id = 1;
+  string id = 2;
+}
+
+message CreateEventRecordRequest {
+  uint32 account_id = 1;
+  string title = 2;
+  string occurred_at = 3;
+  string location = 4;
+  string description = 5;
+  string cover_photo_uri = 6;
+}
+
+message UpdateEventRecordRequest {
+  uint32 account_id = 1;
+  string id = 2;
+  string title = 3;
+  string occurred_at = 4;
+  string location = 5;
+  string description = 6;
+  string cover_photo_uri = 7;
+}
+
+message CreateEventNoteRequest {
+  string title = 1;
+  string content = 2;
+  string photo_uri = 3;
+}
+
+message UpdateEventNoteRequest {
+  string event_id = 1;
+  string note_id = 2;
+  string title = 3;
+  string content = 4;
+  string photo_uri = 5;
+}
+
+message CreateEventNoteRpcRequest {
+  uint32 account_id = 1;
+  string event_id = 2;
+  CreateEventNoteRequest note = 3;
+}
+
+message UpdateEventNoteRpcRequest {
+  uint32 account_id = 1;
+  UpdateEventNoteRequest note = 2;
+}
+
+message DeleteEventNoteRequest {
+  uint32 account_id = 1;
+  string event_id = 2;
+  string note_id = 3;
+}
+
+message EventRecordMutationResponse {
+  bool success = 1;
+  EventRecordDetail event = 2;
+  string message = 3;
+  int32 code = 4;
+}
